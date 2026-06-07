@@ -1,19 +1,6 @@
-@import "tailwindcss";
-
-@theme {
-  --color-background: #0A0A0B;
-  --color-surface: #111214;
-  --color-surface-elevated: #17181C;
-  --color-border: #26282E;
-  --color-primary: #F5F5F7;
-  --color-secondary: #A0A3AD;
-  --color-accent: #7C5CFF;
-  --color-success: #2ED47A;
-  --color-warning: #FFB547;
-  --color-error: #FF6B6B;
-
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   body {
@@ -42,18 +29,21 @@
   background: #7C5CFF;
 }
 
+/* Ambient glow utilities */
 .ambient-glow {
   filter: blur(80px);
   opacity: 0.15;
   pointer-events: none;
 }
 
+/* Custom transitions and states */
 .premium-focus:focus {
   outline: none;
   border-color: #7C5CFF;
   box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.15);
 }
 
+/* Custom grid mesh pattern */
 .bg-mesh {
   background-size: 40px 40px;
   background-image: 
