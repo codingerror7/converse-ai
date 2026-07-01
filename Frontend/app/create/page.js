@@ -73,7 +73,7 @@ export default function CreateBot() {
         <div className="absolute bottom-6 left-10 text-[10px] font-mono text-secondary">
           Node Alignment: <span className="text-primary font-bold">{step * 25}%</span>
         </div>
-      </div>
+      </div>                              
 
       {/* RIGHT PANEL - 40% Width Workspace */}
       <div className="w-full md:w-[40%] flex flex-col justify-center p-6 sm:p-10 md:p-12 z-10 bg-background">
