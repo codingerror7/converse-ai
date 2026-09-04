@@ -48,11 +48,10 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-[2.15rem] leading-[1.02] sm:text-5xl md:text-6xl lg:text-[4.8rem] font-extrabold tracking-[-0.04em] text-white lg:leading-[0.98] font-sans drop-shadow-md"
+              className="text-[2.15rem] leading-[1.02] sm:text-5xl md:text-6xl lg:text-[5rem] font-extrabold tracking-[-0.04em] text-white lg:leading-[0.98] font-sans drop-shadow-md"
             >
-              Build an AI <br />
-              that talks <br />
-              like you.
+              Build an AI that <br />
+            talks like you.
             </motion.h1>
 
             {/* Concise Supporting Description */}
@@ -63,7 +62,7 @@ export default function HeroFrame() {
               animate="visible"
               className="text-xs sm:text-sm md:text-[15px] text-white/80 leading-relaxed max-w-[420px] mt-3 sm:mt-5 font-normal"
             >
-              Create a personalized AI chatbot by defining its purpose, personality, and behavior — in minutes.
+              Build a chatbot tailored to your purpose, personality, and instructions—without the complexity of building an AI from scratch.
             </motion.p>
 
           </div>
