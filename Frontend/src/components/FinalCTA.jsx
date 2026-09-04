@@ -22,7 +22,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className="relative w-full bg-[#030303] py-16 sm:py-28 lg:py-36 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
+    <section className="relative w-full bg-[#030303] py-16 sm:py-28 lg:py-16 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
       
       {/* Master Centered Panel Container with Thick Black Framing & Responsive Scaling */}
       <div className="relative w-full max-w-[1240px] mx-auto rounded-[24px] sm:rounded-[36px] lg:rounded-[42px] border-4 sm:border-[8px] border-black bg-[#08080e] overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_25px_80px_rgba(0,0,0,0.85)] px-4 sm:px-12 lg:px-16 py-10 sm:py-18 lg:py-24 flex flex-col items-center justify-center text-center">
