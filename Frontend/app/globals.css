@@ -1,62 +1,81 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0A0A0B;
-  --color-surface: #111214;
-  --color-surface-elevated: #17181C;
-  --color-border: #26282E;
-  --color-primary: #F5F5F7;
-  --color-secondary: #A0A3AD;
-  --color-accent: #7C5CFF;
-  --color-success: #2ED47A;
-  --color-warning: #FFB547;
-  --color-error: #FF6B6B;
-
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --color-page-bg: #020205;
+  --color-chassis-bg: #000000;
+  --color-dock-bg: #050508;
+  --color-surface-glass: rgba(10, 10, 24, 0.35);
+  --color-border-glass: rgba(255, 255, 255, 0.14);
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-primary-text: #F5F5F7;
+  --color-secondary-text: #A1A1AA;
+  --color-muted-text: #71717A;
+  --color-primary-violet: #7C3AED;
+  --color-bright-violet: #8B5CF6;
+  --color-indigo: #6366F1;
+  --color-blue-accent: #2563EB;
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    background-color: #020205;
+  }
+
   body {
-    background-color: #0A0A0B;
+    background-color: #020205;
     color: #F5F5F7;
-    font-family: 'Inter', sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: rgba(124, 58, 237, 0.35);
+    color: #FFFFFF;
   }
 }
 
-/* Custom Scrollbars */
+/* Custom Minimal Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0B;
+  background: #020205;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #26282E;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C5CFF;
+  background: rgba(124, 58, 237, 0.6);
 }
 
-.ambient-glow {
-  filter: blur(80px);
-  opacity: 0.15;
-  pointer-events: none;
+/* Frosted Glass Utilities matching reference image */
+.frosted-glass-card {
+  background: rgba(10, 10, 22, 0.38);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
 }
 
-.premium-focus:focus {
-  outline: none;
-  border-color: #7C5CFF;
-  box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.15);
+.frosted-glass-pill {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.bg-mesh {
-  background-size: 40px 40px;
-  background-image:
-    linear-gradient(to right, rgba(38, 40, 46, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(38, 40, 46, 0.15) 1px, transparent 1px);
+.dock-pod {
+  background: #050508;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }

@@ -1,17 +1,25 @@
+"use client";
+
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="py-8 px-6 md:px-12 border-t border-border/40 bg-background text-secondary">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-        <div>
-          <span className="font-semibold text-primary">Aetheris</span> &copy; {new Date().getFullYear()} Aetheris Inc. All rights reserved.
-        </div>
-        <div className="flex items-center gap-6">
-          <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-primary transition-colors">Security</a>
-        </div>
+    <footer className="w-full bg-[#020205] border-t border-white/[0.08] py-10">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        
+        {/* Logo */}
+        <Link href="/" className="select-none">
+          <span className="text-sm font-bold tracking-tight text-[#F5F5F7]">
+            converse<span className="text-[#8B5CF6]">.ai</span>
+          </span>
+        </Link>
+
+        {/* Minimal Copyright */}
+        <p className="text-xs text-[#71717A]">
+          © 2026 Converse-AI. All rights reserved.
+        </p>
+
       </div>
     </footer>
   );
