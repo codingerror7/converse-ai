@@ -43,7 +43,7 @@ export default function Navbar() {
             <Cpu size={18} className="text-white" />
           </div>
           <span className="text-lg font-bold tracking-tight text-primary">
-            Aetheris<span className="text-accent">.</span>
+            Converse AI<span className="text-accent">.</span>
           </span>
         </Link>
 
