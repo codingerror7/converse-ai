@@ -25,10 +25,10 @@ export default function HeroFrame() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center p-3 sm:p-5 md:p-7 overflow-hidden bg-black select-none">
+    <section className="relative w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-7 overflow-hidden bg-black select-none">
       
-      {/* Dominant Thick Black Outer Chassis Frame (matching reference image) */}
-      <div className="relative w-full max-w-[1580px] h-[94vh] min-h-[640px] max-h-[920px] rounded-[38px] sm:rounded-[48px] md:rounded-[56px] border-[8px] sm:border-[12px] md:border-[14px] border-black bg-black overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_rgba(0,0,0,0.98)] flex flex-col justify-between z-10">
+      {/* Dominant Thick Black Outer Chassis Frame with Responsive Scaling */}
+      <div className="relative w-full max-w-[1580px] h-[100svh] sm:h-[94vh] min-h-[560px] max-h-[920px] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] border-4 sm:border-8 md:border-[14px] border-black bg-black overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_25px_80px_rgba(0,0,0,0.98)] flex flex-col justify-between z-10">
         
         {/* Full-Bleed Video Surface clipped inside the rounded frame */}
         <VideoBackground />
@@ -37,18 +37,18 @@ export default function HeroFrame() {
         <NavbarPods />
 
         {/* Center Screen: Left-Center Headline & Right-Side Frosted Cards */}
-        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-center justify-between px-6 sm:px-12 lg:px-16 pt-24 sm:pt-28 pb-20 gap-8 lg:gap-10 my-auto">
+        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-center lg:items-center justify-between px-4 sm:px-10 lg:px-16 pt-16 sm:pt-28 pb-16 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
           
-          {/* Left-Center Hero Typography (Proportions & Layout matching reference) */}
+          {/* Left-Center Hero Typography */}
           <div className="w-full max-w-[560px] text-left">
             
-            {/* Primary Headline (3 compact bold lines) */}
+            {/* Primary Headline (Responsive typography: 3 lines, tight leading) */}
             <motion.h1
               custom={0}
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-4xl sm:text-6xl md:text-7xl lg:text-[4.8rem] font-extrabold tracking-[-0.04em] text-white leading-[0.98] font-sans drop-shadow-md"
+              className="text-[2.15rem] leading-[1.02] sm:text-5xl md:text-6xl lg:text-[4.8rem] font-extrabold tracking-[-0.04em] text-white lg:leading-[0.98] font-sans drop-shadow-md"
             >
               Build an AI <br />
               that talks <br />
@@ -61,29 +61,29 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-sm sm:text-[15px] text-white/80 leading-relaxed max-w-[420px] mt-5 sm:mt-6 font-normal"
+              className="text-xs sm:text-sm md:text-[15px] text-white/80 leading-relaxed max-w-[420px] mt-3 sm:mt-5 font-normal"
             >
               Create a personalized AI chatbot by defining its purpose, personality, and behavior — in minutes.
             </motion.p>
 
           </div>
 
-          {/* Right-Side Stacked Frosted Glass Cards */}
-          <div className="w-full lg:w-auto flex justify-center lg:justify-end shrink-0">
+          {/* Right-Side Stacked Frosted Glass Cards (Responsive position) */}
+          <div className="w-full lg:w-auto flex justify-start sm:justify-center lg:justify-end shrink-0">
             <FloatingCards />
           </div>
 
         </div>
 
         {/* Bottom Bar: Left Swipe Pill + Center Solid Black Notch */}
-        <div className="relative z-30 flex items-end justify-between px-6 sm:px-10 pb-0 pointer-events-none">
+        <div className="relative z-30 flex items-end justify-between px-4 sm:px-10 pb-0 pointer-events-none w-full">
           
-          {/* Bottom-Left Frosted Glass Swipe Pill (matching reference image) */}
+          {/* Bottom-Left Frosted Glass Swipe Pill (hidden on narrow mobile to prevent clutter) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.35 }}
-            className="hidden sm:flex pointer-events-auto items-center gap-3 px-3.5 py-2 rounded-full bg-white/[0.12] backdrop-blur-2xl border border-white/20 shadow-lg mb-4 sm:mb-6"
+            className="hidden md:flex pointer-events-auto items-center gap-3 px-3.5 py-2 rounded-full bg-white/[0.12] backdrop-blur-2xl border border-white/20 shadow-lg mb-4 sm:mb-6"
           >
             <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center text-xs font-black shadow">
               <ChevronRight size={14} strokeWidth={3} />
@@ -98,18 +98,18 @@ export default function HeroFrame() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="pointer-events-auto mx-auto sm:mx-0 absolute left-1/2 -translate-x-1/2 bottom-0 bg-black px-7 sm:px-9 py-3 sm:py-3.5 rounded-t-[28px] sm:rounded-t-[32px] border-t-2 border-x-2 border-black shadow-[0_-12px_35px_rgba(0,0,0,0.95)] flex items-center justify-center"
+            className="pointer-events-auto mx-auto absolute left-1/2 -translate-x-1/2 bottom-0 bg-black px-5 sm:px-9 py-2.5 sm:py-3.5 rounded-t-[20px] sm:rounded-t-[32px] border-t border-x sm:border-t-2 sm:border-x-2 border-black shadow-[0_-12px_35px_rgba(0,0,0,0.95)] flex items-center justify-center"
           >
             <Link
               href="/create"
-              className="px-7 sm:px-8 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:shadow-[0_0_35px_rgba(37,99,235,0.7)] active:scale-95 whitespace-nowrap"
+              className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:shadow-[0_0_35px_rgba(37,99,235,0.7)] active:scale-95 whitespace-nowrap min-h-[42px] sm:min-h-[46px] flex items-center justify-center"
             >
               Choose Your Style
             </Link>
           </motion.div>
 
           {/* Symmetrical right placeholder */}
-          <div className="hidden sm:block w-[180px]" />
+          <div className="hidden md:block w-[180px]" />
 
         </div>
 
