@@ -1,10 +1,11 @@
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-sans',
+  weight: ['400', '500', '600', '700', '800'],
 });
 
 export const metadata = {
@@ -12,13 +13,13 @@ export const metadata = {
   description: 'Create a personalized AI chatbot by defining its purpose, personality, and behavior — in minutes.',
   keywords: ['AI Chatbot Builder', 'Converse AI', 'Custom AI Chatbot', 'AI Platform'],
   authors: [{ name: 'Converse-AI' }],
-  themeColor: '#020205',
+  themeColor: '#000000',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} dark`}>
-      <body className="bg-[#020205] text-[#F5F5F7] font-sans antialiased min-h-screen selection:bg-[#7C3AED]/30 selection:text-white">
+    <html lang="en" className={`${plusJakarta.variable} dark`}>
+      <body className="bg-[#000000] text-[#F5F5F7] font-sans antialiased min-h-screen selection:bg-[#2563EB]/30 selection:text-white">
         {children}
       </body>
     </html>

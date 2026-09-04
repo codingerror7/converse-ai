@@ -3,63 +3,60 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Moon, Sparkles } from 'lucide-react';
+import { Moon } from 'lucide-react';
 
 export default function NavbarPods() {
   const [themeMode, setThemeMode] = useState('Dark');
 
   return (
-    <div className="absolute top-0 inset-x-0 z-30 flex items-start justify-between px-4 sm:px-8 pointer-events-none">
+    <div className="absolute top-0 inset-x-0 z-30 flex items-start justify-between pointer-events-none">
       
-      {/* Top-Left Pod: Logo + Theme Controller */}
+      {/* Top-Left Structural Black Pod */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-auto flex items-center gap-3.5 bg-[#050508]/95 backdrop-blur-md border-x border-b border-white/[0.14] rounded-b-[22px] px-5 py-3 shadow-[0_12px_30px_rgba(0,0,0,0.8)]"
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-auto flex items-center gap-4 bg-black px-6 sm:px-7 py-3 sm:py-3.5 rounded-br-[28px] sm:rounded-br-[32px] border-r-2 border-b-2 border-black shadow-[0_15px_30px_rgba(0,0,0,0.9)]"
       >
-        {/* Typographic Logo */}
-        <Link href="/" className="flex flex-col select-none group">
-          <span className="text-xs sm:text-sm font-extrabold tracking-tight uppercase text-[#F5F5F7] font-sans leading-none">
-            CONVERSE<span className="text-[#8B5CF6]">.AI</span>
+        {/* Brand Typographic Lockup matching reference */}
+        <Link href="/" className="flex flex-col select-none group leading-tight">
+          <span className="text-xs sm:text-[13px] font-black tracking-tight uppercase text-white font-sans">
+            CONVERSE
           </span>
-          <span className="text-[8px] font-mono tracking-widest text-[#71717A] uppercase mt-0.5">
+          <span className="text-xs sm:text-[13px] font-black tracking-tight uppercase text-white font-sans">
             STUDIO
           </span>
         </Link>
 
-        {/* Vertical subtle separator */}
-        <div className="w-px h-5 bg-white/10 mx-0.5" />
-
-        {/* Theme Capsule Toggle */}
+        {/* Dark Theme Pill Toggle matching reference */}
         <button
           onClick={() => setThemeMode(themeMode === 'Dark' ? 'Light' : 'Dark')}
-          className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] text-[11px] font-medium text-[#A1A1AA] hover:text-[#F5F5F7] transition-all"
+          className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#0a0a0f] hover:bg-[#14141d] border border-white/[0.16] text-[11px] font-medium text-white/90 transition-all shadow-inner ml-1"
         >
-          <span>Dark</span>
-          <div className="w-4 h-4 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-[10px]">
-            <Moon size={9} fill="currentColor" />
+          <span className="text-xs font-normal text-white/80">Dark</span>
+          <div className="w-5 h-5 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-[10px] shadow-sm">
+            <Moon size={11} fill="currentColor" />
           </div>
         </button>
       </motion.div>
 
-      {/* Top-Right Pod: Login + Sign Up */}
+      {/* Top-Right Structural Black Pod */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
-        className="pointer-events-auto flex items-center gap-3 bg-[#050508]/95 backdrop-blur-md border-x border-b border-white/[0.14] rounded-b-[22px] px-4 sm:px-5 py-2.5 sm:py-3 shadow-[0_12px_30px_rgba(0,0,0,0.8)]"
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+        className="pointer-events-auto flex items-center gap-3 sm:gap-4 bg-black px-5 sm:px-7 py-3 sm:py-3.5 rounded-bl-[28px] sm:rounded-bl-[32px] border-l-2 border-b-2 border-black shadow-[0_15px_30px_rgba(0,0,0,0.9)]"
       >
         <Link
           href="/create"
-          className="text-xs font-medium text-[#A1A1AA] hover:text-[#F5F5F7] px-2 py-1 transition-colors"
+          className="text-xs font-medium text-white/90 hover:text-white px-2 py-1 transition-colors"
         >
           Log in
         </Link>
 
         <Link
           href="/create"
-          className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full bg-white text-black hover:bg-[#E5E5E5] text-xs font-semibold tracking-tight transition-all shadow-[0_2px_12px_rgba(255,255,255,0.2)] active:scale-95"
+          className="px-5 sm:px-6 py-2 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-bold tracking-tight transition-all shadow-sm active:scale-95 whitespace-nowrap"
         >
           Sign Up
         </Link>
