@@ -59,7 +59,7 @@ export default function CreateBot() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row pt-20">
-      
+
       {/* LEFT PANEL - 60% Width visual panel */}
       <div className="w-full md:w-[60%] border-r border-border/40 bg-[#070708] flex flex-col justify-center items-center p-6 relative">
         <div className="absolute top-10 left-10 text-xs font-bold text-secondary flex items-center gap-2 uppercase tracking-widest z-10">
@@ -73,12 +73,12 @@ export default function CreateBot() {
         <div className="absolute bottom-6 left-10 text-[10px] font-mono text-secondary">
           Node Alignment: <span className="text-primary font-bold">{step * 25}%</span>
         </div>
-      </div>                              
+      </div>
 
       {/* RIGHT PANEL - 40% Width Workspace */}
       <div className="w-full md:w-[40%] flex flex-col justify-center p-6 sm:p-10 md:p-12 z-10 bg-background">
         <div className="w-full max-w-[540px] mx-auto space-y-6">
-          
+
           {/* Top Progress steps header */}
           <ProgressTracker currentStep={step} />
 
@@ -114,9 +114,9 @@ export default function CreateBot() {
           {/* Nav Controls bottom bar */}
           <div className="flex items-center justify-between pt-6 border-t border-border/40">
             {step > 1 ? (
-              <Button 
-                variant="outline" 
-                size="md" 
+              <Button
+                variant="outline"
+                size="md"
                 onClick={handleBack}
                 className="gap-1.5 pl-4"
               >

@@ -11,14 +11,14 @@ import Footer from '../src/components/Footer';
 export default function Home() {
   return (
     <div className="flex-1 bg-background flex flex-col justify-between pt-24 bg-mesh relative min-h-screen overflow-hidden">
-      
+
       {/* Background radial ambient lights */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-accent/5 ambient-glow pointer-events-none" />
       <div className="absolute top-10 left-10 w-[300px] h-[300px] rounded-full bg-accent/2 ambient-glow pointer-events-none" />
 
       {/* Hero Content */}
       <div className="max-w-7xl mx-auto w-full px-6 md:px-12 py-16 md:py-24 text-center z-10 flex-1 flex flex-col justify-center items-center">
-        
+
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
