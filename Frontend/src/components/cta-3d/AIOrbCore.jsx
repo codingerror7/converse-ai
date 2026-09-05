@@ -11,10 +11,9 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
   const lightRef = useRef();
 
   useFrame((state, delta) => {
-    if (prefersReducedMotion) return;
-
+    const motionScale = prefersReducedMotion ? 0.35 : 1;
     const t = state.clock.getElapsedTime();
-    const speedMultiplier = isHovered ? 1.6 : 1.0;
+    const speedMultiplier = (isHovered ? 1.6 : 1.0) * motionScale;
 
     // Smooth breathing scale oscillation
     const breath = 1 + Math.sin(t * 2.2 * speedMultiplier) * 0.045;

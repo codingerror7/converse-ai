@@ -13,10 +13,9 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
   const node3Ref = useRef();
 
   useFrame((state, delta) => {
-    if (prefersReducedMotion) return;
-
+    const motionScale = prefersReducedMotion ? 0.35 : 1;
     const t = state.clock.getElapsedTime();
-    const speed = isHovered ? 1.5 : 1.0;
+    const speed = (isHovered ? 1.5 : 1.0) * motionScale;
 
     // Ring 1: Inner Dynamic Gimbal
     if (ring1Ref.current) {

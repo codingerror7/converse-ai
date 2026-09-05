@@ -16,10 +16,11 @@ export default function FloatingTelemetryNodes({ isHovered = false, prefersReduc
   ];
 
   useFrame((state, delta) => {
-    if (prefersReducedMotion || !groupRef.current) return;
+    if (!groupRef.current) return;
 
+    const motionScale = prefersReducedMotion ? 0.35 : 1;
     const t = state.clock.getElapsedTime();
-    const speedMultiplier = isHovered ? 1.3 : 1.0;
+    const speedMultiplier = (isHovered ? 1.3 : 1.0) * motionScale;
 
     groupRef.current.rotation.y += delta * 0.15 * speedMultiplier;
     groupRef.current.position.y = Math.sin(t * 1.2) * 0.06;

@@ -39,10 +39,11 @@ export default function ParticleConstellation({ isHovered = false, prefersReduce
   }, [count]);
 
   useFrame((state, delta) => {
-    if (prefersReducedMotion || !pointsRef.current) return;
+    if (!pointsRef.current) return;
 
+    const motionScale = prefersReducedMotion ? 0.35 : 1;
     const t = state.clock.getElapsedTime();
-    const speedMultiplier = isHovered ? 1.4 : 1.0;
+    const speedMultiplier = (isHovered ? 1.4 : 1.0) * motionScale;
 
     // Slow ambient rotation of the entire constellation
     pointsRef.current.rotation.y += delta * 0.12 * speedMultiplier;

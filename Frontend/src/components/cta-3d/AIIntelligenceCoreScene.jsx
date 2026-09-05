@@ -43,12 +43,7 @@ function SceneRig({ isHovered, prefersReducedMotion, isMobile }) {
   useFrame((state, delta) => {
     if (!masterGroupRef.current) return;
 
-    if (prefersReducedMotion) {
-      masterGroupRef.current.rotation.set(0, 0, 0);
-      masterGroupRef.current.position.set(0, 0, 0);
-      return;
-    }
-
+    const motionScale = prefersReducedMotion ? 0.35 : 1;
     const t = state.clock.getElapsedTime();
     const pointer = state.pointer; // [-1 to +1]
 
@@ -59,15 +54,15 @@ function SceneRig({ isHovered, prefersReducedMotion, isMobile }) {
     const targetPosY = pointer.y * (isMobile ? 0.08 : 0.18) + Math.sin(t * 1.2) * 0.06;
 
     // Responsive lerping (damped, restrained: "the object is aware of me")
-    const lerpFactor = delta * (isHovered ? 4.5 : 3.0);
-    masterGroupRef.current.rotation.x = THREE.MathUtils.lerp(masterGroupRef.current.rotation.x, targetRotX, lerpFactor);
-    masterGroupRef.current.rotation.y = THREE.MathUtils.lerp(masterGroupRef.current.rotation.y, targetRotY, lerpFactor);
-    masterGroupRef.current.position.x = THREE.MathUtils.lerp(masterGroupRef.current.position.x, targetPosX, lerpFactor);
-    masterGroupRef.current.position.y = THREE.MathUtils.lerp(masterGroupRef.current.position.y, targetPosY, lerpFactor);
+    const lerpFactor = delta * (isHovered ? 4.5 : 3.0) * motionScale;
+    masterGroupRef.current.rotation.x = THREE.MathUtils.lerp(masterGroupRef.current.rotation.x, targetRotX * motionScale, lerpFactor);
+    masterGroupRef.current.rotation.y = THREE.MathUtils.lerp(masterGroupRef.current.rotation.y, targetRotY * motionScale, lerpFactor);
+    masterGroupRef.current.position.x = THREE.MathUtils.lerp(masterGroupRef.current.position.x, targetPosX * motionScale, lerpFactor);
+    masterGroupRef.current.position.y = THREE.MathUtils.lerp(masterGroupRef.current.position.y, targetPosY * motionScale, lerpFactor);
 
     // Scale responsive adjustment
     const baseScale = isMobile ? 0.85 : 1.0;
-    const targetScale = isHovered ? baseScale * 1.05 : baseScale;
+    const targetScale = (isHovered ? baseScale * 1.05 : baseScale) * motionScale;
     masterGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), delta * 3);
   });
 
@@ -130,28 +125,35 @@ export function CSSAIFallback({ isHovered = false }) {
 /* Master 3D Scene Component                                                  */
 /* -------------------------------------------------------------------------- */
 export default function AIIntelligenceCoreScene({ isHovered = false, prefersReducedMotion = false }) {
-  const [hasWebGL, setHasWebGL] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [hasWebGL, setHasWebGL] = useState(true);
 
   useEffect(() => {
     setMounted(true);
-    
-    // Check WebGL availability safely
-    try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) {
+
+    const detectWebGL = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl =
+          canvas.getContext('webgl2') ||
+          canvas.getContext('webgl') ||
+          canvas.getContext('experimental-webgl');
+
+        if (!gl) {
+          setHasWebGL(false);
+        }
+      } catch {
         setHasWebGL(false);
       }
-    } catch {
-      setHasWebGL(false);
-    }
+    };
 
-    // Check device screen width
+    detectWebGL();
+
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
+
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
     return () => window.removeEventListener('resize', handleResize);
@@ -167,7 +169,7 @@ export default function AIIntelligenceCoreScene({ isHovered = false, prefersRedu
 
   return (
     <WebGLErrorBoundary fallback={<CSSAIFallback isHovered={isHovered} />}>
-      <div className="relative w-full h-full min-h-[300px] sm:min-h-[380px] lg:min-h-[460px] flex items-center justify-center">
+      <div className="relative w-full h-full min-h-[300px] sm:min-h-[380px] lg:min-h-[460px] flex items-center justify-center overflow-hidden rounded-[28px]">
         <Suspense fallback={<CSSAIFallback isHovered={isHovered} />}>
           <Canvas
             camera={{ position: [0, 0, 5.4], fov: 42 }}
@@ -176,8 +178,13 @@ export default function AIIntelligenceCoreScene({ isHovered = false, prefersRedu
               antialias: true,
               alpha: true,
               powerPreference: 'high-performance',
+              preserveDrawingBuffer: false,
             }}
-            className="pointer-events-auto"
+            frameloop="always"
+            className="pointer-events-auto h-full w-full"
+            onCreated={({ gl }) => {
+              gl.setClearColor('#000000', 0);
+            }}
           >
             <SceneRig
               isHovered={isHovered}
