@@ -8,7 +8,7 @@ import Footer from '../src/components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#020205] text-[#F5F5F7] flex flex-col selection:bg-[#7C3AED]/30 selection:text-white overflow-x-hidden">
+    <main className="min-h-screen bg-[#020204] text-[#FDFCFF] flex flex-col selection:bg-[#7C3AED]/35 selection:text-white overflow-x-hidden">
       {/* Master Cinematic Hero Window Chassis */}
       <HeroFrame />
 
@@ -23,3 +23,4 @@ export default function Home() {
     </main>
   );
 }
+
