@@ -4,40 +4,40 @@ import React, { useRef, useEffect, useState } from 'react';
 
 export default function VideoBackground() {
   const videoRef = useRef(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+
+  const startPlayback = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.play().catch(() => {
+      // Browsers can defer autoplay until the media is ready or the page is visible.
+    });
+  };
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch((err) => {
-        console.log("Autoplay check:", err?.message || "playback ready");
-      });
-    }
+    startPlayback();
   }, []);
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
       {/* HTML5 Cinematic Video Element */}
       <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onLoadedData={() => setIsLoaded(true)}
-        className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <source src="/main.mp4" type="video/mp4" />
-        <source src="/main.mp4" type="video/mp4" />
-      </video>
+  ref={videoRef}
+  autoPlay
+  muted
+  loop
+  playsInline
+  preload="auto"
+  aria-hidden="true"
+  disablePictureInPicture
+  className="absolute inset-0 z-0 h-full w-full object-cover object-center"
+>
+  <source src="/main.mp4" type="video/mp4" />
+</video>
 
       {/* Fallback dark tone if video is loading */}
-      <div 
-        className={`absolute inset-0 bg-[#050510] transition-opacity duration-1000 ${
-          isLoaded ? 'opacity-0' : 'opacity-100'
-        }`}
+      <div
       />
 
       {/* Layer 1: Very light black overlay to preserve video vibrancy */}

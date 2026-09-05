@@ -13,6 +13,9 @@ export const metadata = {
   description: 'Create a personalized AI chatbot by defining its purpose, personality, and behavior — in minutes.',
   keywords: ['AI Chatbot Builder', 'Converse AI', 'Custom AI Chatbot', 'AI Platform'],
   authors: [{ name: 'Converse-AI' }],
+};
+
+export const viewport = {
   themeColor: '#000000',
 };
 
