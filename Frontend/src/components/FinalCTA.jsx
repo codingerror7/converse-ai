@@ -1,20 +1,22 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, Sparkles, Zap, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, ShieldCheck, Cpu, Activity } from 'lucide-react';
+import AIIntelligenceCoreScene from './cta-3d/AIIntelligenceCoreScene';
 
 export default function FinalCTA() {
   const prefersReducedMotion = useReducedMotion();
+  const [isHovered, setIsHovered] = useState(false);
 
   const fadeIn = {
-    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 18 },
+    hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
     visible: (customDelay = 0) => ({
       opacity: 1,
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.01 : 0.6,
+        duration: prefersReducedMotion ? 0.01 : 0.65,
         delay: prefersReducedMotion ? 0 : customDelay,
         ease: [0.16, 1, 0.3, 1],
       },
@@ -22,104 +24,187 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className="relative w-full bg-[#020204] py-16 sm:py-28 lg:py-24 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
+    <section className="relative w-full bg-[#020204] py-16 sm:py-24 lg:py-28 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
       
-      {/* Master Centered Panel Container with Dominant Thick Black Chassis Framing */}
-      <div className="relative w-full max-w-[1280px] mx-auto rounded-[28px] sm:rounded-[44px] md:rounded-[52px] border-4 sm:border-8 md:border-[12px] border-[#000000] bg-[#05050A] overflow-hidden ring-1 ring-white/[0.09] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_-20px_rgba(0,0,0,0.98)] px-5 sm:px-12 lg:px-16 py-12 sm:py-20 lg:py-24 flex flex-col items-center justify-center text-center">
+      {/* Master Chassis Container with Signature Converse AI Framing */}
+      <div 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative w-full max-w-[1380px] mx-auto rounded-[28px] sm:rounded-[44px] md:rounded-[52px] border-4 sm:border-8 md:border-[12px] border-[#000000] bg-[#05050A] overflow-hidden ring-1 ring-white/[0.09] shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_30px_90px_-20px_rgba(0,0,0,0.98)] p-6 sm:p-10 md:p-12 lg:p-16 transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.09),0_35px_100px_-20px_rgba(124,58,237,0.18)]"
+      >
         
         {/* Specular top hairline highlight */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
 
-        {/* Atmosphere: Multi-layer soft violet/indigo ambient backlight */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] sm:w-[650px] h-[240px] sm:h-[380px] rounded-full bg-gradient-to-tr from-[#7C3AED]/15 via-[#6366F1]/10 to-transparent blur-[100px] pointer-events-none" />
+        {/* Ambient Luminous Violet/Indigo Backlight Glow */}
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] sm:w-[580px] h-[350px] sm:h-[580px] rounded-full bg-gradient-to-tr from-[#7C3AED]/22 via-[#6366F1]/16 to-[#2563EB]/10 blur-[130px] pointer-events-none transition-opacity duration-700 opacity-80 group-hover:opacity-100" />
+        
+        {/* Left Secondary Subtle Indigo Fill Glow */}
+        <div className="absolute bottom-0 left-10 w-[260px] sm:w-[420px] h-[260px] sm:h-[420px] rounded-full bg-[#6366F1]/10 blur-[110px] pointer-events-none" />
 
-        {/* Faint Abstract Conversational Signal Dots */}
-        <div className="absolute top-7 sm:top-9 left-1/2 -translate-x-1/2 flex items-center gap-1.5 opacity-30 pointer-events-none">
+        {/* Subtle Decorative Grid Pattern Overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.035] pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
+          }}
+        />
+
+        {/* Faint Abstract Signal Status Notch */}
+        <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 opacity-40 pointer-events-none">
           <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse" />
           <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse [animation-delay:0.2s]" />
           <span className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse [animation-delay:0.4s]" />
         </div>
 
-        {/* Inner Content Stack */}
-        <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center w-full">
+        {/* Asymmetric Editorial Grid */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
           
-          {/* Eyebrow */}
-          <motion.div
-            custom={0}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] mb-4 sm:mb-6 shadow-sm"
-          >
-            <Sparkles size={11} className="text-[#8B5CF6]" />
-            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] text-[#A78BFA] font-mono">
-              READY TO BUILD?
-            </span>
-          </motion.div>
-
-          {/* Dominant Headline */}
-          <motion.h2
-            custom={0.1}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.4rem] font-black tracking-[-0.035em] text-[#FDFCFF] leading-[1.04] lg:leading-[0.98] font-sans drop-shadow-md mb-3 sm:mb-5"
-          >
-            Build an <span className="text-gradient-violet drop-shadow-[0_0_35px_rgba(167,139,250,0.35)]">AI</span> that talks <br className="hidden sm:inline" />
-            like you.
-          </motion.h2>
-
-          {/* Supporting Text */}
-          <motion.p
-            custom={0.2}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="text-xs sm:text-base md:text-lg text-[#9CA3AF] max-w-[500px] leading-relaxed mb-6 sm:mb-8 font-normal px-2"
-          >
-            Join developers, creators, and modern teams building customized AI assistants in minutes.
-          </motion.p>
-
-          {/* Primary Compact Pill CTA */}
-          <motion.div
-            custom={0.3}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="w-full sm:w-auto flex justify-center mb-6 sm:mb-8"
-          >
-            <Link
-              href="/create"
-              className="group relative inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-white rounded-full bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#2563EB] hover:from-[#6D28D9] hover:via-[#4F46E5] hover:to-[#1D4ED8] transition-all duration-300 shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_45px_rgba(124,58,237,0.8)] -translate-y-0 hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto max-w-[320px] min-h-[46px] sm:min-h-[50px]"
+          {/* ────────────────────────────────────────────────────────── */}
+          {/* Left Column: Eyebrow + Headline + Copy + CTA Buttons      */}
+          {/* ────────────────────────────────────────────────────────── */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left w-full">
+            
+            {/* Eyebrow Badge */}
+            <motion.div
+              custom={0}
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.12] mb-4 sm:mb-6 shadow-sm backdrop-blur-md"
             >
-              <span>Build Your AI</span>
-              <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
+              <Sparkles size={12} className="text-[#8B5CF6] animate-pulse" />
+              <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] text-[#A78BFA] font-mono">
+                CONVERSE AI // INTELLIGENCE CORE v2.4
+              </span>
+            </motion.div>
 
-          {/* Micro-Features Checklist */}
-          <motion.div
-            custom={0.35}
-            variants={fadeIn}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-xs text-white/50 font-mono"
-          >
-            <span className="flex items-center gap-1">
-              <Zap size={11} className="text-[#8B5CF6]" />
-              No credit card required
-            </span>
-            <span className="hidden sm:inline text-white/20">•</span>
-            <span className="flex items-center gap-1">
-              <ShieldCheck size={11} className="text-[#8B5CF6]" />
-              Instant embed & webhook
-            </span>
-          </motion.div>
+            {/* Dominant Headline */}
+            <motion.h2
+              custom={0.08}
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.1rem] font-black tracking-[-0.035em] text-[#FDFCFF] leading-[1.04] lg:leading-[0.98] font-sans drop-shadow-md mb-4 sm:mb-6"
+            >
+              Ready to start the <br />
+              <span className="text-gradient-violet drop-shadow-[0_0_35px_rgba(167,139,250,0.35)]">
+                conversation?
+              </span>
+            </motion.h2>
+
+            {/* Supporting Copy */}
+            <motion.p
+              custom={0.16}
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="text-xs sm:text-base md:text-[17px] text-[#9CA3AF] max-w-[540px] leading-relaxed mb-6 sm:mb-8 font-normal"
+            >
+              Build, customize, and deploy an AI chatbot tailored precisely to your brand's voice, personality, and knowledge base—in minutes, without complexity.
+            </motion.p>
+
+            {/* Dual CTA Action Buttons */}
+            <motion.div
+              custom={0.24}
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-10"
+            >
+              {/* Primary Glowing Pill CTA */}
+              <Link
+                href="/create"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-white rounded-full bg-gradient-to-r from-[#7C3AED] via-[#6366F1] to-[#2563EB] hover:from-[#6D28D9] hover:via-[#4F46E5] hover:to-[#1D4ED8] transition-all duration-300 shadow-[0_0_30px_rgba(124,58,237,0.5)] hover:shadow-[0_0_45px_rgba(124,58,237,0.85)] -translate-y-0 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"
+              >
+                <span>Build Your AI</span>
+                <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />
+              </Link>
+
+              {/* Secondary Frosted Pill CTA */}
+              <a
+                href="#how-it-works"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-semibold text-white/80 hover:text-white rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.12] hover:border-white/25 backdrop-blur-xl transition-all duration-200 shadow-sm active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"
+              >
+                <span>Explore Workflow</span>
+              </a>
+            </motion.div>
+
+            {/* Trust & Performance Feature Badges */}
+            <motion.div
+              custom={0.32}
+              variants={fadeIn}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="flex flex-wrap items-center gap-3 sm:gap-6 text-[10px] sm:text-xs text-white/55 font-mono pt-2 border-t border-white/[0.07] w-full"
+            >
+              <span className="flex items-center gap-1.5">
+                <Zap size={12} className="text-[#8B5CF6]" />
+                No credit card required
+              </span>
+              <span className="hidden sm:inline text-white/20">•</span>
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck size={12} className="text-[#8B5CF6]" />
+                Instant embed & webhook
+              </span>
+              <span className="hidden md:inline text-white/20">•</span>
+              <span className="hidden md:flex items-center gap-1.5 text-emerald-400/90">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Latency &lt; 180ms
+              </span>
+            </motion.div>
+
+          </div>
+
+          {/* ────────────────────────────────────────────────────────── */}
+          {/* Right Column: Interactive 3D AI Intelligence Core Scene   */}
+          {/* ────────────────────────────────────────────────────────── */}
+          <div className="lg:col-span-5 relative flex items-center justify-center w-full min-h-[340px] sm:min-h-[420px] lg:min-h-[480px]">
+            
+            {/* Ambient Radial Vignette behind 3D Object */}
+            <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(124,58,237,0.12)_0%,rgba(99,102,241,0.05)_40%,transparent_80%)] pointer-events-none" />
+
+            {/* Top-Right Floating Telemetry Chip */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#080812]/80 backdrop-blur-xl border border-white/[0.12] shadow-lg pointer-events-none"
+            >
+              <Cpu size={11} className="text-[#8B5CF6]" />
+              <span className="text-[10px] font-mono text-white/80 tracking-wider">
+                CORE: <span className="text-emerald-400 font-semibold">100% SYNCD</span>
+              </span>
+            </motion.div>
+
+            {/* Bottom-Left Floating Neural Stream Chip */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#080812]/80 backdrop-blur-xl border border-white/[0.12] shadow-lg pointer-events-none"
+            >
+              <Activity size={11} className="text-[#38BDF8] animate-pulse" />
+              <span className="text-[10px] font-mono text-white/80 tracking-wider">
+                NEURAL STREAM: <span className="text-[#A78BFA]">ACTIVE</span>
+              </span>
+            </motion.div>
+
+            {/* Interactive 3D Canvas Mount */}
+            <div className="w-full h-full relative z-10">
+              <AIIntelligenceCoreScene
+                isHovered={isHovered}
+                prefersReducedMotion={prefersReducedMotion}
+              />
+            </div>
+
+          </div>
 
         </div>
 
@@ -128,4 +213,3 @@ export default function FinalCTA() {
     </section>
   );
 }
-
