@@ -189,7 +189,7 @@ export default function HowItWorks() {
       {/* Subtle background atmosphere with low-opacity violet glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] rounded-full bg-[#8B5CF6]/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="max-w-2xl text-left mb-12 sm:mb-16">

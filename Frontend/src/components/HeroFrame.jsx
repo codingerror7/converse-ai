@@ -87,7 +87,7 @@ export default function HeroFrame() {
             <div className="w-6 h-6 rounded-full bg-white text-black flex items-center justify-center text-xs font-black shadow">
               <ChevronRight size={14} strokeWidth={3} />
             </div>
-            <span className="text-[11px] font-semibold text-white tracking-wide pr-2">
+            <span className="text-[12px] font-semibold text-white tracking-wide pr-2">
               Swipe to Get Started
             </span>
           </motion.div>
@@ -103,7 +103,7 @@ export default function HeroFrame() {
               href="/create"
               className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(37,99,235,0.45)] hover:shadow-[0_0_35px_rgba(37,99,235,0.7)] active:scale-95 whitespace-nowrap min-h-[42px] sm:min-h-[46px] flex items-center justify-center"
             >
-              Choose Your Style
+              Build Your AI
             </Link>
           </motion.div>
 

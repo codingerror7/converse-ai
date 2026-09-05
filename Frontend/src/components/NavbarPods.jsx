@@ -20,25 +20,14 @@ export default function NavbarPods() {
       >
         {/* Brand Typographic Lockup */}
         <Link href="/" className="flex flex-col select-none group leading-tight">
-          <span className="text-[11px] sm:text-[18px] font-black tracking-tight uppercase text-white font-sans">
+          <span className="text-[11px] sm:text-[22px] font-black tracking-tight uppercase text-white font-sans">
             CONVERSE
           </span>
-          <span className="text-[11px] sm:text-[18px] font-black tracking-tight uppercase text-white font-sans">
+          <span className="text-[11px] sm:text-[22px] font-black tracking-tight uppercase text-white font-sans">
             AI.
           </span>
         </Link>
 
-        {/* Dark Theme Pill Toggle */}
-        <button
-          onClick={() => setThemeMode(themeMode === 'Dark' ? 'Light' : 'Dark')}
-          aria-label="Toggle theme"
-          className="flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-5 py-1 sm:py-1.5 rounded-full bg-[#0a0a0f] hover:bg-[#14141d] border border-white/[0.16] text-[10px] sm:text-[18px] font-medium text-white/90 transition-all shadow-inner ml-0.5 sm:ml-1"
-        >
-          <span className="text-[10px] sm:text-xs font-normal text-white/80 hidden xs:inline">Dark</span>
-          <div className="w-4 h-4 sm:w-8 sm:h-5 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-[9px] sm:text-[15px] shadow-sm">
-            <Moon size={9} className="sm:w-[11px] sm:h-[11px]" fill="currentColor" />
-          </div>
-        </button>
       </motion.div>
 
       {/* Top-Right Structural Black Pod */}
