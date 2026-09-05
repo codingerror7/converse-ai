@@ -165,7 +165,7 @@ export default function FinalCTA() {
           {/* ────────────────────────────────────────────────────────── */}
           {/* Right Column: Interactive 3D AI Intelligence Core Scene   */}
           {/* ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-5 relative flex items-center justify-center w-full min-h-[340px] sm:min-h-[420px] lg:min-h-[480px]">
+          <div className="lg:col-span-5 relative flex items-center justify-center w-full min-h-[380px] sm:min-h-[480px] lg:min-h-[580px]">
             
             {/* Ambient Radial Vignette behind 3D Object */}
             <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(124,58,237,0.12)_0%,rgba(99,102,241,0.05)_40%,transparent_80%)] pointer-events-none" />
