@@ -42,23 +42,22 @@ export default function VideoBackground() {
       </video>
 
       {/* Fallback dark tone backdrop */}
-      <div className="absolute inset-0 bg-[#06060C] -z-10" />
+      <div className="absolute inset-0 bg-[#06090D] -z-10" />
 
       {/* Layer 1: Balanced translucent dark overlay for video vibrancy */}
-      <div className="absolute inset-0 bg-black/28" />
+      <div className="absolute inset-0 bg-[#06090D]/50" />
 
       {/* Layer 2: Precision radial gradient behind hero typography */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_25%_48%,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.2)_60%,transparent_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_75%_at_25%_48%,rgba(6,9,13,0.75)_0%,rgba(6,9,13,0.3)_60%,transparent_100%)]" />
 
       {/* Layer 3: Smooth bottom dock gradient */}
-      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#06090D] via-[#06090D]/60 to-transparent" />
 
       {/* Layer 4: Smooth top navbar pod gradient */}
-      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/75 via-black/35 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#06090D] via-[#06090D]/50 to-transparent" />
 
       {/* Layer 5: Subtle top rim specular glass sheen */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#67E8F9]/20 to-transparent" />
     </div>
   );
 }
-

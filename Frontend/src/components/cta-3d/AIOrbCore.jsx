@@ -48,15 +48,15 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
       {/* Central Omnidirectional AI Pulse Light */}
       <pointLight
         ref={lightRef}
-        color="#8B5CF6"
+        color="#3B82F6"
         distance={6}
         intensity={2.2}
         decay={2}
       />
       
-      {/* Secondary Indigo Soft Fill Light */}
+      {/* Secondary Cyan Soft Fill Light */}
       <pointLight
-        color="#2563EB"
+        color="#06B6D4"
         position={[0, -0.4, 0.4]}
         distance={4}
         intensity={1.2}
@@ -67,9 +67,9 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
       <mesh ref={coreRef}>
         <sphereGeometry args={[0.78, 48, 48]} />
         <meshPhysicalMaterial
-          color="#0d041a"
-          emissive="#6366F1"
-          emissiveIntensity={isHovered ? 0.9 : 0.6}
+          color="#06090D"
+          emissive="#3B82F6"
+          emissiveIntensity={isHovered ? 0.95 : 0.65}
           roughness={0.15}
           metalness={0.7}
           clearcoat={0.9}
@@ -84,9 +84,9 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
       <mesh ref={wireframeRef}>
         <icosahedronGeometry args={[0.98, 2]} />
         <meshStandardMaterial
-          color="#A78BFA"
-          emissive="#8B5CF6"
-          emissiveIntensity={isHovered ? 1.4 : 0.8}
+          color="#67E8F9"
+          emissive="#06B6D4"
+          emissiveIntensity={isHovered ? 1.5 : 0.9}
           wireframe
           transparent
           opacity={isHovered ? 0.85 : 0.6}
@@ -99,7 +99,7 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
       <mesh ref={innerGlowRef}>
         <sphereGeometry args={[0.45, 24, 24]} />
         <meshBasicMaterial
-          color={isHovered ? "#C4B5FD" : "#8B5CF6"}
+          color={isHovered ? "#67E8F9" : "#06B6D4"}
           transparent
           opacity={isHovered ? 0.9 : 0.7}
           blending={THREE.AdditiveBlending}

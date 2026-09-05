@@ -8,11 +8,11 @@ export default function FloatingTelemetryNodes({ isHovered = false, prefersReduc
   const groupRef = useRef();
 
   const nodes = [
-    { pos: [1.8, 1.1, 0.6], color: '#8B5CF6', size: 0.055, speed: 0.8 },
-    { pos: [-1.9, -0.9, 0.8], color: '#38BDF8', size: 0.05, speed: 0.9 },
-    { pos: [1.2, -1.6, -0.7], color: '#A78BFA', size: 0.045, speed: 0.7 },
-    { pos: [-1.4, 1.4, -0.5], color: '#6366F1', size: 0.048, speed: 0.85 },
-    { pos: [0.3, 2.1, 0.4], color: '#C084FC', size: 0.04, speed: 0.6 },
+    { pos: [1.8, 1.1, 0.6], color: '#3B82F6', size: 0.055, speed: 0.8 },
+    { pos: [-1.9, -0.9, 0.8], color: '#06B6D4', size: 0.05, speed: 0.9 },
+    { pos: [1.2, -1.6, -0.7], color: '#67E8F9', size: 0.045, speed: 0.7 },
+    { pos: [-1.4, 1.4, -0.5], color: '#3B82F6', size: 0.048, speed: 0.85 },
+    { pos: [0.3, 2.1, 0.4], color: '#06B6D4', size: 0.04, speed: 0.6 },
   ];
 
   useFrame((state, delta) => {

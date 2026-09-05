@@ -81,7 +81,7 @@ export default function ParticleConstellation({ isHovered = false, prefersReduce
       </bufferGeometry>
       <pointsMaterial
         size={0.038}
-        color="#C4B5FD"
+        color="#67E8F9"
         transparent
         opacity={isHovered ? 0.85 : 0.6}
         sizeAttenuation

@@ -59,8 +59,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh>
           <torusGeometry args={[1.35, 0.016, 16, 100]} />
           <meshStandardMaterial
-            color="#8B5CF6"
-            emissive="#7C3AED"
+            color="#3B82F6"
+            emissive="#2563EB"
             emissiveIntensity={isHovered ? 1.2 : 0.65}
             metalness={0.9}
             roughness={0.15}
@@ -71,8 +71,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh ref={node1Ref}>
           <sphereGeometry args={[0.045, 16, 16]} />
           <meshStandardMaterial
-            color="#FFFFFF"
-            emissive="#A78BFA"
+            color="#F1F5F9"
+            emissive="#67E8F9"
             emissiveIntensity={2.5}
             roughness={0.1}
           />
@@ -84,8 +84,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh>
           <torusGeometry args={[1.75, 0.013, 16, 100]} />
           <meshStandardMaterial
-            color="#6366F1"
-            emissive="#4F46E5"
+            color="#06B6D4"
+            emissive="#0891B2"
             emissiveIntensity={isHovered ? 1.0 : 0.5}
             metalness={0.95}
             roughness={0.2}
@@ -96,8 +96,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh ref={node2Ref}>
           <sphereGeometry args={[0.04, 16, 16]} />
           <meshStandardMaterial
-            color="#E0E7FF"
-            emissive="#6366F1"
+            color="#F1F5F9"
+            emissive="#3B82F6"
             emissiveIntensity={2.2}
             roughness={0.1}
           />
@@ -109,8 +109,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh>
           <torusGeometry args={[2.15, 0.01, 16, 120]} />
           <meshStandardMaterial
-            color="#38BDF8"
-            emissive="#2563EB"
+            color="#67E8F9"
+            emissive="#06B6D4"
             emissiveIntensity={isHovered ? 0.9 : 0.4}
             metalness={0.9}
             roughness={0.25}
@@ -123,8 +123,8 @@ export default function OrbitalGimbalRings({ isHovered = false, prefersReducedMo
         <mesh ref={node3Ref}>
           <sphereGeometry args={[0.035, 16, 16]} />
           <meshStandardMaterial
-            color="#BAE6FD"
-            emissive="#38BDF8"
+            color="#67E8F9"
+            emissive="#06B6D4"
             emissiveIntensity={2.0}
             roughness={0.1}
           />

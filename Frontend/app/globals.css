@@ -1,33 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-page-bg: #020204;
-  --color-chassis-bg: #000000;
-  --color-dock-bg: #050508;
-  --color-surface-card: #08080E;
-  --color-surface-glass: rgba(10, 10, 20, 0.45);
-  --color-border-glass: rgba(255, 255, 255, 0.12);
-  --color-border-subtle: rgba(255, 255, 255, 0.07);
-  --color-primary-text: #FDFCFF;
-  --color-secondary-text: #9CA3AF;
-  --color-muted-text: #6B7280;
-  --color-primary-violet: #7C3AED;
-  --color-bright-violet: #8B5CF6;
-  --color-light-violet: #A78BFA;
-  --color-indigo: #6366F1;
-  --color-blue-accent: #2563EB;
+  --color-page-bg: #06090D;
+  --color-chassis-bg: #06090D;
+  --color-dock-bg: #0B1117;
+  --color-surface-card: #101820;
+  --color-surface-glass: rgba(16, 24, 32, 0.65);
+  --color-border-glass: rgba(30, 41, 51, 0.85);
+  --color-border-subtle: rgba(30, 41, 51, 0.6);
+  --color-primary-text: #F1F5F9;
+  --color-secondary-text: #94A3B8;
+  --color-muted-text: #94A3B8;
+  --color-primary-accent: #3B82F6;
+  --color-secondary-accent: #06B6D4;
+  --color-highlight: #67E8F9;
+  --color-border-main: #1E2933;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
-    background-color: #020204;
+    background-color: #06090D;
   }
 
   body {
-    background-color: #020204;
-    color: #FDFCFF;
+    background-color: #06090D;
+    color: #F1F5F9;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -44,13 +43,13 @@
     height: 100%;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.025;
+    opacity: 0.02;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   ::selection {
-    background-color: rgba(124, 58, 237, 0.38);
-    color: #FFFFFF;
+    background-color: rgba(59, 130, 246, 0.35);
+    color: #F1F5F9;
   }
 }
 
@@ -61,33 +60,33 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #020204;
+  background: #06090D;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: #1E2933;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.65);
+  background: #3B82F6;
 }
 
 /* Premium Frosted Glass & Specular Surface Utilities */
 .frosted-glass-card {
-  background: rgba(8, 8, 16, 0.55);
+  background: rgba(16, 24, 32, 0.75);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  border: 1px solid #1E2933;
+  box-shadow: 0 20px 50px -15px rgba(6, 9, 13, 0.9), inset 0 1px 1px 0 rgba(103, 232, 249, 0.1);
 }
 
 .frosted-glass-pill {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(16, 24, 32, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid #1E2933;
+  box-shadow: 0 10px 25px -5px rgba(6, 9, 13, 0.5), inset 0 1px 0 0 rgba(103, 232, 249, 0.15);
 }
 
 .specular-border {
@@ -100,7 +99,7 @@
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.03) 100%);
+  background: linear-gradient(180deg, rgba(103, 232, 249, 0.25) 0%, rgba(30, 41, 51, 0.2) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -108,11 +107,11 @@
 }
 
 .glow-ambient {
-  box-shadow: 0 0 50px -10px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 0 50px -10px rgba(59, 130, 246, 0.25);
 }
 
-.text-gradient-violet {
-  background: linear-gradient(135deg, #FFFFFF 30%, #C4B5FD 100%);
+.text-gradient-primary {
+  background: linear-gradient(135deg, #F1F5F9 20%, #67E8F9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
