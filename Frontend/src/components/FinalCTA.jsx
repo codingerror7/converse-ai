@@ -65,21 +65,7 @@ export default function FinalCTA() {
           {/* Left Column: Eyebrow + Headline + Copy + CTA Buttons      */}
           {/* ────────────────────────────────────────────────────────── */}
           <div className="lg:col-span-7 flex flex-col items-start text-left w-full">
-            
-            {/* Eyebrow Badge */}
-            <motion.div
-              custom={0}
-              variants={fadeIn}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#101820] border border-[#1E2933] mb-4 sm:mb-6 shadow-sm backdrop-blur-md"
-            >
-              <Sparkles size={12} className="text-[#3B82F6] animate-pulse" />
-              <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] text-[#67E8F9] font-mono">
-                CONVERSE AI // INTELLIGENCE CORE v2.4
-              </span>
-            </motion.div>
+          
 
             {/* Dominant Headline */}
             <motion.h2

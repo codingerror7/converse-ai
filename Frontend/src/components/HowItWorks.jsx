@@ -298,18 +298,7 @@ export default function HowItWorks() {
         
         {/* Section Header */}
         <div className="max-w-2xl text-left mb-12 sm:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101820] border border-[#1E2933] mb-3.5 sm:mb-4 shadow-sm"
-          >
-            <Sparkles size={11} className="text-[#3B82F6]" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#67E8F9] font-mono">
-              HOW IT WORKS
-            </span>
-          </motion.div>
+
 
           <motion.h2
             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}

@@ -38,7 +38,7 @@ export default function VideoBackground() {
           isVideoLoaded ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <source src="/main2.mp4" type="video/mp4" />
+        <source src="/main.mp4" type="video/mp4" />
       </video>
 
       {/* Fallback dark tone backdrop */}
