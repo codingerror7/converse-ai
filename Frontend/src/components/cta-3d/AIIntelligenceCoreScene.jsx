@@ -64,10 +64,11 @@ function SceneRig({ isHovered, prefersReducedMotion, deviceType }) {
     masterGroupRef.current.position.y = THREE.MathUtils.lerp(masterGroupRef.current.position.y, targetPosY * motionScale, lerpFactor);
 
     // Responsive viewport-fitted scaling to ensure 100% visibility without clipping
+    // The model occupies ~75-80% of the canvas area, leaving comfortable breathing room around all outer rings/particles
     const safeDimension = Math.min(viewport.width, viewport.height);
-    // Outer gimbal ring radius is 2.15 (diameter 4.3). We allocate ~88% of canvas safeDimension
-    const baseFitScale = (safeDimension * 0.88) / 4.4;
-    const targetScale = (isHovered ? baseFitScale * 1.05 : baseFitScale) * (prefersReducedMotion ? 0.95 : 1);
+    const targetOccupancy = isMobile ? 0.74 : isTablet ? 0.78 : 0.80;
+    const baseFitScale = (safeDimension * targetOccupancy) / 4.4;
+    const targetScale = (isHovered ? baseFitScale * 1.04 : baseFitScale) * (prefersReducedMotion ? 0.95 : 1);
     
     masterGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), delta * 4);
   });

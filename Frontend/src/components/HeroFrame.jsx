@@ -104,6 +104,8 @@ export default function HeroFrame() {
           >
             <Link
               href="/create"
+              data-cursor="cta"
+              data-cursor-magnetic="true"
               className="group px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] text-[#F1F5F9] text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(59,130,246,0.45)] hover:shadow-[0_0_35px_rgba(6,182,212,0.7)] active:scale-95 whitespace-nowrap min-h-[42px] sm:min-h-[46px] flex items-center gap-2"
             >
               <span>Build Your AI</span>

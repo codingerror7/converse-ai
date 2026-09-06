@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
+import CustomCursor from '../src/components/CustomCursor';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${plusJakarta.variable} dark`}>
       <body className="bg-[#06090D] text-[#F1F5F9] font-sans antialiased min-h-screen selection:bg-[#3B82F6]/35 selection:text-[#F1F5F9]">
+        <CustomCursor />
         {children}
       </body>
     </html>

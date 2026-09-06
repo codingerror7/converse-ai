@@ -32,6 +32,7 @@ export default function FloatingCards() {
       
       {/* Top Card: Create Your AI */}
       <motion.div
+        data-cursor="card"
         initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
@@ -90,6 +91,7 @@ export default function FloatingCards() {
 
       {/* Bottom Card: Your AI is Ready */}
       <motion.div
+        data-cursor="card"
         initial={{ opacity: 0, x: prefersReducedMotion ? 0 : 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}

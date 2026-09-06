@@ -53,6 +53,26 @@
   }
 }
 
+/* Custom AI Focus Cursor Rules (Desktop fine pointer only) */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor [role="button"],
+  html.has-custom-cursor summary {
+    cursor: none !important;
+  }
+
+  /* Allow native text cursor for text editing inputs */
+  html.has-custom-cursor input[type="text"],
+  html.has-custom-cursor input[type="email"],
+  html.has-custom-cursor input[type="search"],
+  html.has-custom-cursor textarea {
+    cursor: text !important;
+  }
+}
+
 /* Custom Sleek Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
