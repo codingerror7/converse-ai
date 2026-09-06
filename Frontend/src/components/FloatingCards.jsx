@@ -84,18 +84,7 @@ export default function FloatingCards() {
             <Sparkles size={11} className="text-[#67E8F9]" />
           </Link>
 
-          {/* Avatar Stack preview badge */}
-          <div className="flex items-center -space-x-1.5">
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-tr from-[#3B82F6] to-[#06B6D4] border border-[#1E2933] flex items-center justify-center text-[9px] sm:text-[10px] text-[#F1F5F9] font-bold shadow">
-              ✦
-            </div>
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-tr from-[#2563EB] to-[#3B82F6] border border-[#1E2933] flex items-center justify-center text-[9px] sm:text-[10px] text-[#F1F5F9] font-bold shadow">
-              AI
-            </div>
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#0B1117] border border-[#1E2933] flex items-center justify-center text-[8px] sm:text-[9px] text-[#94A3B8] font-mono">
-              +2k
-            </div>
-          </div>
+        
         </div>
       </motion.div>
 
