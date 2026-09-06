@@ -59,12 +59,12 @@ export default function FinalCTA() {
         </div>
 
         {/* Asymmetric Editorial Grid */}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center w-full">
           
           {/* ────────────────────────────────────────────────────────── */}
           {/* Left Column: Eyebrow + Headline + Copy + CTA Buttons      */}
           {/* ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left w-full">
+          <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-start text-left w-full">
           
 
             {/* Dominant Headline */}
@@ -74,7 +74,7 @@ export default function FinalCTA() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.1rem] font-black tracking-[-0.035em] text-[#F1F5F9] leading-[1.04] lg:leading-[0.98] font-sans drop-shadow-md mb-4 sm:mb-6"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-[3.9rem] xl:text-[4.2rem] font-black tracking-[-0.035em] text-[#F1F5F9] leading-[1.04] lg:leading-[0.98] font-sans drop-shadow-md mb-4 sm:mb-6"
             >
               Ready to start the <br />
               <span className="text-gradient-primary drop-shadow-[0_0_35px_rgba(103,232,249,0.35)]">
@@ -151,10 +151,10 @@ export default function FinalCTA() {
           {/* ────────────────────────────────────────────────────────── */}
           {/* Right Column: Interactive 3D AI Intelligence Core Scene   */}
           {/* ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-5 relative flex items-center justify-center w-full min-h-[380px] sm:min-h-[480px] lg:min-h-[580px]">
+          <div className="lg:col-span-6 xl:col-span-6 relative flex items-center justify-center w-full min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] xl:min-h-[680px] h-[460px] sm:h-[540px] lg:h-[620px] xl:h-[680px]">
             
             {/* Ambient Radial Vignette behind 3D Object */}
-            <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(59,130,246,0.12)_0%,rgba(6,182,212,0.05)_40%,transparent_80%)] pointer-events-none" />
+            <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(59,130,246,0.15)_0%,rgba(6,182,212,0.06)_45%,transparent_80%)] pointer-events-none" />
 
             {/* Top-Right Floating Telemetry Chip */}
             <motion.div
@@ -183,7 +183,7 @@ export default function FinalCTA() {
             </motion.div>
 
             {/* Interactive 3D Canvas Mount */}
-            <div className="w-full h-full relative z-10">
+            <div className="w-full h-full relative z-10 flex items-center justify-center">
               <AIIntelligenceCoreScene
                 isHovered={isHovered}
                 prefersReducedMotion={prefersReducedMotion}
