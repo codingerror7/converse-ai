@@ -40,7 +40,7 @@ export default function HeroFrame() {
         <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-start lg:items-center justify-center lg:justify-between px-5 sm:px-10 lg:px-16 pt-20 sm:pt-28 pb-20 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
           
           {/* Hero Typography Container (Responsive, No Overflow) */}
-          <div className="w-full max-w-[580px] text-left">
+          <div className="w-full max-w-[680px] text-left">
 
             {/* Primary Headline */}
             <motion.h1
