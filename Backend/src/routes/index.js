@@ -1,13 +1,16 @@
 import { Router } from "express";
 import chatbotRoutes from "./chatbot.routes.js";
 import chatRoutes from "./chat.routes.js";
+import { getDBStatus } from "../config/db.config.js";
 
 const apiRouter = Router();
 
-// Health check endpoint
+// Health check endpoint with safe database status
 apiRouter.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "healthy",
+  const db = getDBStatus();
+  res.status(db.isConnected ? 200 : 503).json({
+    status: db.isConnected ? "healthy" : "degraded",
+    database: db.status,
     service: "converse-ai-backend",
     timestamp: new Date().toISOString(),
   });

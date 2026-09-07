@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -19,6 +19,7 @@ import {
   Building2,
   Copy,
   ExternalLink,
+  RefreshCw,
 } from 'lucide-react';
 import { getChatbotAPI, sendChatMessageAPI } from '../../../src/lib/api';
 
@@ -37,6 +38,7 @@ export default function ChatbotPage() {
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [lastFailedMessage, setLastFailedMessage] = useState(null);
   const [copiedLink, setCopiedLink] = useState(false);
 
   const messagesEndRef = useRef(null);
@@ -102,7 +104,7 @@ export default function ChatbotPage() {
   }, [messages, isSending]);
 
   // Send Message Handler
-  const handleSendMessage = async (textToSend) => {
+  const handleSendMessage = useCallback(async (textToSend) => {
     const text = (textToSend || inputText).trim();
     if (!text || isSending || !chatbot) return;
 
@@ -120,6 +122,7 @@ export default function ChatbotPage() {
     setInputText('');
     setIsSending(true);
     setErrorMessage(null);
+    setLastFailedMessage(null);
 
     // Format history for backend (role & content)
     const conversationHistory = updatedMessages
@@ -149,20 +152,46 @@ export default function ChatbotPage() {
       setErrorMessage(
         err.message || 'Unable to get a response right now. Please try asking again.'
       );
+      setLastFailedMessage(text);
     } finally {
       setIsSending(false);
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     }
-  };
+  }, [inputText, isSending, chatbot, messages]);
 
-  // Copy Public Link to Clipboard
+  // Resilient Copy Public Link with Clipboard API & Fallback
   const handleCopyShareLink = () => {
     if (typeof window === 'undefined') return;
-    navigator.clipboard.writeText(window.location.href);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2200);
+    const url = window.location.href;
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2200);
+      }).catch(() => fallbackCopyText(url));
+    } else {
+      fallbackCopyText(url);
+    }
+  };
+
+  const fallbackCopyText = (text) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2200);
+    } catch (e) {
+      console.warn("Clipboard copy failed:", e);
+    }
   };
 
   // Clear / Reset Conversation
@@ -178,6 +207,7 @@ export default function ChatbotPage() {
     };
     setMessages([initialGreeting]);
     setErrorMessage(null);
+    setLastFailedMessage(null);
   };
 
   return (
@@ -418,20 +448,31 @@ export default function ChatbotPage() {
                 </motion.div>
               )}
 
-              {/* Inline Network / API Error Banner */}
+              {/* Inline Network / API Error Banner with Retry */}
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between gap-2">
+                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <AlertCircle size={14} className="text-rose-400 shrink-0" />
                     <span>{errorMessage}</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setErrorMessage(null)}
-                    className="text-rose-400 hover:text-white font-mono text-xs px-1.5 py-0.5 rounded cursor-pointer"
-                  >
-                    Dismiss
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {lastFailedMessage && (
+                      <button
+                        type="button"
+                        onClick={() => handleSendMessage(lastFailedMessage)}
+                        className="inline-flex items-center gap-1 text-xs text-[#06B6D4] hover:underline font-mono cursor-pointer"
+                      >
+                        <RefreshCw size={11} /> Retry
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setErrorMessage(null)}
+                      className="text-rose-400 hover:text-white font-mono text-xs px-1.5 py-0.5 rounded cursor-pointer"
+                    >
+                      Dismiss
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -477,6 +518,12 @@ export default function ChatbotPage() {
                     maxLength={1500}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSendMessage();
+                      }
+                    }}
                     placeholder={`Ask ${chatbot.businessName} anything...`}
                     disabled={isSending}
                     className="w-full bg-[#0B1117] text-[#F1F5F9] placeholder:text-[#94A3B8]/40 text-xs sm:text-sm rounded-xl pl-4 pr-10 py-3 border border-[#1E2933] hover:border-[#1E2933]/80 focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/50 outline-none transition-all shadow-inner"

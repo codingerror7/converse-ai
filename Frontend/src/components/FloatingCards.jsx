@@ -78,7 +78,7 @@ export default function FloatingCards() {
         {/* Footer: Compact Pill Button + Avatar Badge */}
         <div className="flex items-center justify-between pt-2 border-t border-[#1E2933]">
           <Link
-            href="/create"
+            href="/Business"
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] border border-transparent text-[11px] font-semibold text-[#F1F5F9] transition-all duration-200 shadow-sm active:scale-95"
           >
             <span>Customize</span>
@@ -134,7 +134,7 @@ export default function FloatingCards() {
         {/* Footer: Compact Pill Button */}
         <div className="flex items-center justify-between pt-2 border-t border-[#1E2933]">
           <Link
-            href="/create"
+            href="/Business"
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] border border-transparent text-[11px] font-semibold text-[#F1F5F9] transition-all duration-200 shadow-sm active:scale-95"
           >
             <span>Try it</span>

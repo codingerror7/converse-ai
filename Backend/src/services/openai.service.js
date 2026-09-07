@@ -16,40 +16,51 @@ function getOpenAIClient() {
 
   openaiClient = new OpenAI({
     apiKey: apiKey.trim(),
+    timeout: 15000, // 15 seconds request timeout
+    maxRetries: 1,  // Prevent retry storms
   });
 
   return openaiClient;
 }
 
 /**
- * Intelligent scoped fallback responder used when the external AI provider has zero billing credits.
- * Strictly respects business scope, hallucination rules, and verified context.
+ * Intelligent scoped fallback responder used when the external AI provider has zero billing credits
+ * or is temporarily unavailable. Strictly respects business scope, hallucination rules, and verified context.
  */
 function generateContextualFallback({ systemPrompt, userMessage }) {
-  const query = userMessage.toLowerCase().trim();
+  const query = (userMessage || "").toLowerCase().trim();
 
-  // Extract Business Name & Category & Context from system prompt
+  // Extract Business Name & Category & Knowledge from system prompt
   const nameMatch = systemPrompt.match(/You are the official AI assistant representing "([^"]+)"/);
   const businessName = nameMatch ? nameMatch[1] : "our business";
 
   const categoryMatch = systemPrompt.match(/Industry \/ Category: ([^\n]+)/);
   const category = categoryMatch ? categoryMatch[1] : "our domain";
 
-  const knowledgeMatch = systemPrompt.match(/=== VERIFIED BUSINESS KNOWLEDGE ===\n([\s\S]*?)(?=\n===|\n\n===|$)/);
+  const knowledgeMatch = systemPrompt.match(/<business_knowledge>([\s\S]*?)<\/business_knowledge>/);
   const knowledge = knowledgeMatch ? knowledgeMatch[1].trim() : "";
 
+  // Prompt Injection Refusal Defense
+  if (
+    query.match(
+      /\b(ignore (all|previous|prior)|reveal (system|hidden|prompt)|what are your (instructions|rules)|disclose prompt|you are now|override instructions|pretend you are|system directive)\b/i
+    )
+  ) {
+    return `I am the dedicated AI assistant for ${businessName}. I cannot disclose internal system instructions or directives. How can I help you regarding our ${category.toLowerCase()} services today?`;
+  }
+
   // Greetings & Pleasantries
-  if (query.match(/^(hi|hello|hey|greetings|good morning|good evening|good afternoon|howdy)/i)) {
+  if (query.match(/^(hi|hello|hey|greetings|good morning|good evening|good afternoon|howdy)\b/i)) {
     return `Hello! 👋 Welcome to ${businessName}. I'm here to answer any questions you have about our ${category.toLowerCase()} services. What can I help you with today?`;
   }
 
-  if (query.match(/^(thanks|thank you|appreciate it|thx)/i)) {
+  if (query.match(/^(thanks|thank you|appreciate it|thx)\b/i)) {
     return `You're very welcome! If you have any other questions about ${businessName}, feel free to ask anytime.`;
   }
 
   // Unrelated questions / Out-of-Scope check
   const isUnrelated = query.match(
-    /\b(weather|football|cricket|basketball|match|election|politics|capital of|movie|celebrity|recipe|cook pizza|write python code|crypto price|bitcoin)\b/i
+    /\b(weather|football|cricket|basketball|match|election|politics|capital of|movie|celebrity|recipe|cook pizza|write python code|crypto price|bitcoin|stock market)\b/i
   );
 
   if (isUnrelated) {
@@ -67,7 +78,10 @@ function generateContextualFallback({ systemPrompt, userMessage }) {
   }
 
   // Services / What we do / Features / General inquiries
-  if (query.match(/\b(service|services|do you offer|what do you do|help|about|feature|offer|hours|timing|location|where|trial)\b/i) || query.length > 0) {
+  if (
+    query.match(/\b(service|services|do you offer|what do you do|help|about|feature|offer|hours|timing|location|where|trial)\b/i) ||
+    query.length > 0
+  ) {
     if (knowledge) {
       return `At ${businessName} (${category}), here is what you need to know:\n\n${knowledge}\n\nIs there anything specific you would like to know more about?`;
     }
@@ -115,7 +129,7 @@ export async function generateChatResponse({
   const messages = [
     { role: "system", content: systemPrompt },
     ...sanitizedHistory,
-    { role: "user", content: userMessage.trim().slice(0, 2000) },
+    { role: "user", content: (userMessage || "").trim().slice(0, 2000) },
   ];
 
   try {
@@ -136,19 +150,18 @@ export async function generateChatResponse({
   } catch (error) {
     console.warn("OpenAI API call encountered an issue:", error?.message || error);
 
-    // If quota exhausted / rate limit from OpenAI, use scoped context fallback
+    // If quota exhausted / rate limit / unauthorized from OpenAI, use scoped context fallback
     if (
       error?.status === 429 ||
       error?.code === "insufficient_quota" ||
+      error?.status === 401 ||
       (typeof error?.message === "string" &&
-        (error.message.includes("credits") || error.message.includes("quota") || error.message.includes("Rate limit")))
+        (error.message.includes("credits") ||
+          error.message.includes("quota") ||
+          error.message.includes("Rate limit") ||
+          error.message.includes("API key")))
     ) {
       console.log("ℹ️ Serving scoped knowledge response using contextual engine.");
-      return generateContextualFallback({ systemPrompt, userMessage });
-    }
-
-    if (error?.status === 401) {
-      console.warn("OpenAI key unauthorized; serving contextual response.");
       return generateContextualFallback({ systemPrompt, userMessage });
     }
 

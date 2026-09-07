@@ -1,9 +1,27 @@
 import mongoose from "mongoose";
 
-let isConnected = false;
+/**
+ * Returns safe database connection status without exposing credentials
+ */
+export const getDBStatus = () => {
+  const state = mongoose.connection.readyState;
+  const states = {
+    0: "disconnected",
+    1: "connected",
+    2: "connecting",
+    3: "disconnecting",
+  };
+  return {
+    status: states[state] || "unknown",
+    isConnected: state === 1,
+  };
+};
 
+/**
+ * Connect to MongoDB with connection reuse and event handlers
+ */
 export const connectDB = async () => {
-  if (isConnected) {
+  if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }
 
@@ -17,19 +35,17 @@ export const connectDB = async () => {
   try {
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 8000,
+      maxPoolSize: 10,
     });
 
-    isConnected = conn.connections[0].readyState === 1;
     console.log(`MongoDB connected successfully: ${conn.connection.host}`);
 
     mongoose.connection.on("error", (err) => {
       console.error("MongoDB connection error:", err.message);
-      isConnected = false;
     });
 
     mongoose.connection.on("disconnected", () => {
-      console.warn("MongoDB disconnected. Reconnection will be attempted on next query.");
-      isConnected = false;
+      console.warn("MongoDB disconnected. Reconnection will be attempted automatically.");
     });
 
     return conn;

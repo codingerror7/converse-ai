@@ -22,13 +22,13 @@ export async function createChatbot(req, res, next) {
   try {
     const { businessName, category, description, behavior, instructions } = req.body;
 
-    // Generate unique identifier
+    // Generate unique identifier with collision resistance
     let chatbotId = generateChatbotId();
-    let exists = await Chatbot.findOne({ chatbotId }).lean();
+    let exists = await Chatbot.findOne({ chatbotId }).select("_id").lean();
     let attempts = 0;
     while (exists && attempts < 5) {
       chatbotId = generateChatbotId();
-      exists = await Chatbot.findOne({ chatbotId }).lean();
+      exists = await Chatbot.findOne({ chatbotId }).select("_id").lean();
       attempts++;
     }
 
@@ -80,20 +80,22 @@ export async function createChatbot(req, res, next) {
 
 /**
  * GET /api/chatbots/:chatbotId
- * Retrieve public chatbot profile by ID
+ * Retrieve public chatbot profile by ID (Strict projection: no system prompt or internal secrets)
  */
 export async function getChatbotById(req, res, next) {
   try {
     const { chatbotId } = req.params;
 
-    if (!chatbotId || typeof chatbotId !== "string") {
+    if (!chatbotId || typeof chatbotId !== "string" || !/^c_[a-zA-Z0-9_-]{4,32}$/.test(chatbotId.trim())) {
       return res.status(400).json({
         success: false,
         message: "A valid chatbot ID is required.",
       });
     }
 
-    const chatbot = await Chatbot.findOne({ chatbotId: chatbotId.trim() }).lean();
+    const chatbot = await Chatbot.findOne({ chatbotId: chatbotId.trim() })
+      .select("chatbotId businessName category welcomeMessage createdAt -_id")
+      .lean();
 
     if (!chatbot) {
       return res.status(404).json({

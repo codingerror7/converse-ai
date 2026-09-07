@@ -9,8 +9,10 @@ export async function sendChatMessage(req, res, next) {
   try {
     const { chatbotId, message, conversationHistory } = req.body;
 
-    // Retrieve chatbot and its system prompt from MongoDB
-    const chatbot = await Chatbot.findOne({ chatbotId: chatbotId.trim() });
+    // Retrieve chatbot and its system prompt from MongoDB (minimal lean projection)
+    const chatbot = await Chatbot.findOne({ chatbotId: chatbotId.trim() })
+      .select("chatbotId systemPrompt businessName")
+      .lean();
 
     if (!chatbot) {
       return res.status(404).json({

@@ -44,7 +44,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <Link href="/create" className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150">
+                <Link href="/Business" className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150">
                   AI Builder
                 </Link>
               </li>

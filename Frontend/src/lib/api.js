@@ -1,9 +1,50 @@
 /**
- * Centralized API Client for Converse-AI Frontend
+ * Centralized Hardened API Client for Converse-AI Frontend
  */
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+const REQUEST_TIMEOUT_MS = 18000;
+
+/**
+ * Enhanced fetch with timeout and unified error parsing
+ */
+async function fetchWithTimeout(url, options = {}) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    if (error.name === "AbortError") {
+      throw new Error("Request timed out. The server took too long to respond.");
+    }
+    throw new Error(
+      "Unable to connect to Converse-AI server. Please check your internet connection or verify the backend is active."
+    );
+  }
+}
+
+/**
+ * Safely parses response JSON or falls back to text/status message
+ */
+async function parseResponseData(response) {
+  try {
+    return await response.json();
+  } catch {
+    return {
+      success: response.ok,
+      message: response.statusText || "Unexpected response from server.",
+    };
+  }
+}
 
 /**
  * Creates a new custom chatbot with business parameters.
@@ -17,7 +58,7 @@ const API_BASE_URL =
  * @returns {Promise<{success: boolean, chatbot: Object}>}
  */
 export async function createChatbotAPI(data) {
-  const response = await fetch(`${API_BASE_URL}/chatbots`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}/chatbots`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -25,11 +66,11 @@ export async function createChatbotAPI(data) {
     body: JSON.stringify(data),
   });
 
-  const result = await response.json();
+  const result = await parseResponseData(response);
 
   if (!response.ok || !result.success) {
     throw new Error(
-      result.message || "Failed to create chatbot. Please try again."
+      result.message || "Failed to create chatbot. Please verify inputs and try again."
     );
   }
 
@@ -43,7 +84,8 @@ export async function createChatbotAPI(data) {
  * @returns {Promise<{success: boolean, chatbot: Object}>}
  */
 export async function getChatbotAPI(chatbotId) {
-  const response = await fetch(`${API_BASE_URL}/chatbots/${chatbotId}`, {
+  const sanitizedId = encodeURIComponent((chatbotId || "").trim());
+  const response = await fetchWithTimeout(`${API_BASE_URL}/chatbots/${sanitizedId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -51,11 +93,11 @@ export async function getChatbotAPI(chatbotId) {
     cache: "no-store",
   });
 
-  const result = await response.json();
+  const result = await parseResponseData(response);
 
   if (!response.ok || !result.success) {
     throw new Error(
-      result.message || "Chatbot not found or unable to load details."
+      result.message || "Chatbot not found or link has expired."
     );
   }
 
@@ -76,23 +118,23 @@ export async function sendChatMessageAPI({
   message,
   conversationHistory = [],
 }) {
-  const response = await fetch(`${API_BASE_URL}/chat`, {
+  const response = await fetchWithTimeout(`${API_BASE_URL}/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      chatbotId,
-      message,
-      conversationHistory,
+      chatbotId: (chatbotId || "").trim(),
+      message: (message || "").trim(),
+      conversationHistory: conversationHistory.slice(-16),
     }),
   });
 
-  const result = await response.json();
+  const result = await parseResponseData(response);
 
   if (!response.ok || !result.success) {
     throw new Error(
-      result.message || "Unable to receive AI response. Please try again."
+      result.message || "Unable to receive AI response. Please try asking again."
     );
   }
 
