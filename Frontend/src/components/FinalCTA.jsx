@@ -5,7 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion, useInView } from 'framer-motion';
 import { ArrowRight, Sparkles, Zap, ShieldCheck, Cpu, Activity } from 'lucide-react';
-import { CSSAIFallback } from './cta-3d/AIIntelligenceCoreScene';
+import CSSAIFallback from './cta-3d/CSSAIFallback';
 
 // Dynamically import heavy Three.js 3D WebGL Canvas to keep initial landing page bundle ultra-light
 const AIIntelligenceCoreScene = dynamic(
