@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Footer from '../../src/components/Footer';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
@@ -765,6 +766,7 @@ export default function BusinessSetupPage() {
           <span>Your business context is private and used solely to train your custom model.</span>
         </p>
       </footer>
+      <Footer/>
 
     </div>
   );
