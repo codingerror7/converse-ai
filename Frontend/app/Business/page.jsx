@@ -285,21 +285,16 @@ export default function BusinessSetupPage() {
       {/* ────────────────────────────────────────────────────────── */}
       {/* Top Header / Minimal Product Setup Bar                    */}
       {/* ────────────────────────────────────────────────────────── */}
-      <header className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-2 flex items-center justify-between">
+      <header className="relative z-30 w-full max-w-8xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-2 flex items-center justify-between">
         
         {/* Left: Brand Identity Lockup */}
-        <Link
-          href="/"
-          data-cursor="interactive"
-          className="group flex items-center gap-2.5 select-none leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6] rounded-lg p-1 transition-transform"
-        >
-          <div className="flex flex-col leading-tight">
-            <span className="text-[14px] sm:text-[16px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans group-hover:text-white transition-colors">
+        <Link href="/" className="flex items-center gap-2 select-none group leading-none">
+          <div className="flex flex-col select-none group leading-tight">
+            <span className="text-[11px] sm:text-[18px] md:text-[24px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans transition-colors group-hover:text-[#F1F5F9]">
               CONVERSE
             </span>
-            <span className="text-[14px] sm:text-[16px] font-black tracking-tight uppercase text-[#3B82F6] font-sans flex items-center gap-1">
-              AI
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
+            <span className="text-[11px] sm:text-[18px] md:text-[24px] font-black tracking-tight uppercase text-white font-sans flex items-center gap-1">
+              AI.
             </span>
           </div>
         </Link>
@@ -326,7 +321,7 @@ export default function BusinessSetupPage() {
       {/* ────────────────────────────────────────────────────────── */}
       {/* Main Content Workspace                                    */}
       {/* ────────────────────────────────────────────────────────── */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3.5 sm:px-6 py-6 sm:py-10 md:py-12 w-full">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3.5 sm:px-6 py-6 sm:py-10 md:py-8 w-full">
         
         <div className="w-full max-w-[680px] mx-auto flex flex-col items-center">
 
@@ -372,9 +367,9 @@ export default function BusinessSetupPage() {
             variants={fadeIn}
             initial="hidden"
             animate="visible"
-            className="text-center mb-6 sm:mb-8 max-w-[540px]"
+            className="text-center mb-6 sm:mb-8 max-w-[700px]"
           >
-            <h1 className="text-2xl sm:text-4xl md:text-[2.65rem] font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.1] mb-2 sm:mb-3 drop-shadow-md">
+            <h1 className="text-2xl sm:text-4xl md:text-[2.95rem] font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.1] mb-2 sm:mb-3 drop-shadow-md">
               Tell us about your{' '}
               <span className="text-gradient-primary drop-shadow-[0_0_30px_rgba(103,232,249,0.3)]">
                 business.
