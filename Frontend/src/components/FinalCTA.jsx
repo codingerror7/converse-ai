@@ -105,7 +105,7 @@ export default function FinalCTA() {
             >
               {/* Primary Glowing Pill CTA */}
               <Link
-                href="/create"
+                href="/Business"
                 data-cursor="cta"
                 data-cursor-magnetic="true"
                 className="group relative inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-[#F1F5F9] rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] transition-all duration-300 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_45px_rgba(6,182,212,0.85)] -translate-y-0 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"

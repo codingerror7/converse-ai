@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Footer from '../../src/components/Footer';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
@@ -25,8 +24,8 @@ import {
   Briefcase,
   Cpu,
   Layers,
-  HelpCircle,
 } from 'lucide-react';
+import { createChatbotAPI } from '../../src/lib/api';
 
 /* -------------------------------------------------------------------------- */
 /* Categories Configuration with Icons & Context Helpers                      */
@@ -118,6 +117,7 @@ export default function BusinessSetupPage() {
     description: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const [focusedField, setFocusedField] = useState(null);
 
   const dropdownRef = useRef(null);
@@ -173,10 +173,10 @@ export default function BusinessSetupPage() {
     description:
       !description.trim()
         ? 'Please tell us a little about your business.'
-        : description.trim().length < 20
-        ? `Tell us a little more (${20 - description.trim().length} more chars needed).`
-        : description.length > 1000
-        ? 'Description must be 1000 characters or fewer.'
+        : description.trim().length < 10
+        ? `Tell us a little more (${10 - description.trim().length} more chars needed).`
+        : description.length > 2000
+        ? 'Description must be 2000 characters or fewer.'
         : null,
   };
 
@@ -191,6 +191,7 @@ export default function BusinessSetupPage() {
     setCategory(catName);
     setIsDropdownOpen(false);
     setTouched((prev) => ({ ...prev, category: true }));
+    setSubmitError(null);
   };
 
   const handleAddPromptSuggestion = (promptText) => {
@@ -199,6 +200,7 @@ export default function BusinessSetupPage() {
     const updated = `${description}${prefix}${promptText}: `;
     if (updated.length <= 1000) {
       setDescription(updated);
+      setSubmitError(null);
       if (textareaRef.current) {
         textareaRef.current.focus();
       }
@@ -207,6 +209,7 @@ export default function BusinessSetupPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError(null);
 
     // Mark all as touched
     setTouched({
@@ -225,21 +228,25 @@ export default function BusinessSetupPage() {
       businessName: businessName.trim(),
       category,
       description: description.trim(),
-      updatedAt: new Date().toISOString(),
     };
 
     try {
-      // Save to sessionStorage and localStorage for multi-step product flow
-      sessionStorage.setItem('converse_ai_business_data', JSON.stringify(businessPayload));
-      localStorage.setItem('converse_ai_business_data', JSON.stringify(businessPayload));
+      // Real API call to Express Backend
+      const result = await createChatbotAPI(businessPayload);
 
-      // Simulate smooth step transition
-      await new Promise((resolve) => setTimeout(resolve, 850));
+      if (result.success && result.chatbot?.chatbotId) {
+        // Save to storage for persistence
+        sessionStorage.setItem('converse_ai_business_data', JSON.stringify(result.chatbot));
+        localStorage.setItem('converse_ai_business_data', JSON.stringify(result.chatbot));
 
-      // Route to Chatbot creation / preview step
-      router.push('/create');
+        // Smooth redirect to the newly created customized chatbot
+        router.push(`/chat/${result.chatbot.chatbotId}`);
+      } else {
+        throw new Error(result.message || 'Chatbot creation failed. Please retry.');
+      }
     } catch (error) {
       console.error('Submission error:', error);
+      setSubmitError(error.message || 'Unable to connect to Converse-AI server. Please verify backend is running.');
       setIsSubmitting(false);
     }
   };
@@ -286,16 +293,21 @@ export default function BusinessSetupPage() {
       {/* ────────────────────────────────────────────────────────── */}
       {/* Top Header / Minimal Product Setup Bar                    */}
       {/* ────────────────────────────────────────────────────────── */}
-      <header className="relative z-30 w-full max-w-8xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-2 flex items-center justify-between">
+      <header className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-8 pt-4 sm:pt-6 pb-2 flex items-center justify-between">
         
         {/* Left: Brand Identity Lockup */}
-        <Link href="/" className="flex items-center gap-2 select-none group leading-none">
-          <div className="flex flex-col select-none group leading-tight">
-            <span className="text-[11px] sm:text-[18px] md:text-[24px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans transition-colors group-hover:text-[#F1F5F9]">
+        <Link
+          href="/"
+          data-cursor="interactive"
+          className="group flex items-center gap-2.5 select-none leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6] rounded-lg p-1 transition-transform"
+        >
+          <div className="flex flex-col leading-tight">
+            <span className="text-[14px] sm:text-[16px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans group-hover:text-white transition-colors">
               CONVERSE
             </span>
-            <span className="text-[11px] sm:text-[18px] md:text-[24px] font-black tracking-tight uppercase text-white font-sans flex items-center gap-1">
-              AI.
+            <span className="text-[14px] sm:text-[16px] font-black tracking-tight uppercase text-[#3B82F6] font-sans flex items-center gap-1">
+              AI
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
             </span>
           </div>
         </Link>
@@ -322,7 +334,7 @@ export default function BusinessSetupPage() {
       {/* ────────────────────────────────────────────────────────── */}
       {/* Main Content Workspace                                    */}
       {/* ────────────────────────────────────────────────────────── */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3.5 sm:px-6 py-6 sm:py-10 md:py-8 w-full">
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-3.5 sm:px-6 py-6 sm:py-10 md:py-12 w-full">
         
         <div className="w-full max-w-[680px] mx-auto flex flex-col items-center">
 
@@ -368,9 +380,9 @@ export default function BusinessSetupPage() {
             variants={fadeIn}
             initial="hidden"
             animate="visible"
-            className="text-center mb-6 sm:mb-8 max-w-[700px]"
+            className="text-center mb-6 sm:mb-8 max-w-[540px]"
           >
-            <h1 className="text-2xl sm:text-4xl md:text-[2.95rem] font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.1] mb-2 sm:mb-3 drop-shadow-md">
+            <h1 className="text-2xl sm:text-4xl md:text-[2.65rem] font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.1] mb-2 sm:mb-3 drop-shadow-md">
               Tell us about your{' '}
               <span className="text-gradient-primary drop-shadow-[0_0_30px_rgba(103,232,249,0.3)]">
                 business.
@@ -397,6 +409,28 @@ export default function BusinessSetupPage() {
 
             {/* Subtle Surface Radial Backlight */}
             <div className="absolute -top-12 right-10 w-44 h-44 rounded-full bg-[#3B82F6]/10 blur-3xl pointer-events-none" />
+
+            {/* Server Error Banner */}
+            <AnimatePresence>
+              {submitError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="mb-5 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2.5"
+                >
+                  <AlertCircle size={16} className="shrink-0 text-rose-400" />
+                  <span className="flex-1">{submitError}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitError(null)}
+                    className="text-rose-400 hover:text-white font-mono text-xs px-2 py-0.5 rounded cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <form onSubmit={handleSubmit} noValidate className="relative z-10 space-y-5 sm:space-y-6">
               
@@ -431,6 +465,7 @@ export default function BusinessSetupPage() {
                     value={businessName}
                     onChange={(e) => {
                       setBusinessName(e.target.value);
+                      setSubmitError(null);
                       if (touched.businessName) {
                         setTouched((prev) => ({ ...prev, businessName: true }));
                       }
@@ -629,14 +664,14 @@ export default function BusinessSetupPage() {
                   {/* Character Counter */}
                   <span
                     className={`text-[10px] font-mono transition-colors ${
-                      description.length > 950
+                      description.length > 1900
                         ? 'text-rose-400 font-bold'
-                        : description.length >= 20
+                        : description.length >= 10
                         ? 'text-[#06B6D4]'
                         : 'text-[#94A3B8]/60'
                     }`}
                   >
-                    {description.length} / 1000
+                    {description.length} / 2000
                   </span>
                 </div>
 
@@ -646,10 +681,11 @@ export default function BusinessSetupPage() {
                     name="description"
                     ref={textareaRef}
                     rows={5}
-                    maxLength={1000}
+                    maxLength={2000}
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);
+                      setSubmitError(null);
                       if (touched.description) {
                         setTouched((prev) => ({ ...prev, description: true }));
                       }
@@ -722,12 +758,12 @@ export default function BusinessSetupPage() {
                     <div className="flex items-center gap-2.5">
                       <span className="w-4 h-4 border-2 border-[#06B6D4] border-t-transparent rounded-full animate-spin" />
                       <span className="font-mono text-xs text-[#67E8F9] tracking-wide">
-                        Preparing your assistant...
+                        Creating your AI assistant...
                       </span>
                     </div>
                   ) : (
                     <>
-                      <span>Continue to Assistant Setup</span>
+                      <span>Build My Chatbot</span>
                       <ArrowRight
                         size={15}
                         className="transition-transform duration-200 group-hover:translate-x-1"
@@ -766,7 +802,6 @@ export default function BusinessSetupPage() {
           <span>Your business context is private and used solely to train your custom model.</span>
         </p>
       </footer>
-      <Footer/>
 
     </div>
   );
