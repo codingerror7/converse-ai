@@ -37,10 +37,10 @@ export default function HeroFrame() {
         <NavbarPods />
 
         {/* Center Screen: Left-Center Headline (Desktop: With Floating Cards, Mobile: Clean & Focused) */}
-        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-start lg:items-center justify-center lg:justify-between px-5 sm:px-10 lg:px-16 pt-20 sm:pt-28 pb-20 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
+        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-start lg:items-center justify-center lg:justify-between px-5 sm:px-10 lg:px-16 pt-16 sm:pt-28 pb-16 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
           
           {/* Hero Typography Container (Responsive, No Overflow) */}
-          <div className="w-full max-w-[680px] text-left">
+          <div className="w-full max-w-[680px] text-left flex flex-col items-start">
 
             {/* Primary Headline */}
             <motion.h1
@@ -48,7 +48,7 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-[2.15rem] leading-[1.06] sm:text-5xl md:text-6xl lg:text-[4.85rem] font-black tracking-[-0.035em] text-[#F1F5F9] lg:leading-[0.98] font-sans drop-shadow-md"
+              className="text-[2.45rem] xs:text-[2.75rem] sm:text-5xl md:text-6xl lg:text-[4.85rem] font-black tracking-[-0.04em] sm:tracking-[-0.035em] text-[#F1F5F9] leading-[1.04] sm:leading-tight lg:leading-[0.98] font-sans drop-shadow-md"
             >
               Build an AI that <br />
               <span className="text-gradient-primary drop-shadow-[0_0_35px_rgba(103,232,249,0.35)]">
@@ -62,7 +62,7 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-xs sm:text-sm md:text-[15px] text-[#94A3B8] leading-relaxed max-w-[340px] sm:max-w-[440px] mt-3.5 sm:mt-5 font-normal"
+              className="text-[13.5px] xs:text-[14.5px] sm:text-sm md:text-[15px] text-[#CBD5E1] sm:text-[#94A3B8] leading-[1.55] sm:leading-relaxed max-w-[360px] sm:max-w-[440px] mt-4 sm:mt-5 font-normal"
             >
               Build a custom chatbot tailored to your purpose, personality, and knowledge base—without complex infrastructure or AI overhead.
             </motion.p>

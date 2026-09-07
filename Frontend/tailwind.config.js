@@ -18,6 +18,9 @@ module.exports = {
         'secondary-accent': '#06B6D4',
         highlight: '#67E8F9',
       },
+      screens: {
+        xs: '380px',
+      },
       fontFamily: {
         sans: ['var(--font-sans)', 'sans-serif'],
       },
