@@ -41,13 +41,13 @@ export default function FinalCTA() {
   };
 
   return (
-    <section ref={containerRef} className="relative w-full bg-[#06090D] py-16 sm:py-24 lg:py-28 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
+    <section ref={containerRef} className="relative w-full bg-[#06090D] py-14 sm:py-20 lg:py-28 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
       
       {/* Master Chassis Container with Signature Framing */}
       <div 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative w-full max-w-[1380px] mx-auto rounded-[28px] sm:rounded-[44px] md:rounded-[52px] border-4 sm:border-8 md:border-[12px] border-[#06090D] bg-[#0B1117] overflow-hidden ring-1 ring-[#1E2933] shadow-[0_0_0_1px_rgba(30,41,51,0.6),0_30px_90px_-20px_rgba(6,9,13,0.98)] p-6 sm:p-10 md:p-12 lg:p-16 transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(30,41,51,0.9),0_35px_100px_-20px_rgba(59,130,246,0.18)]"
+        className="relative w-full max-w-[1380px] mx-auto rounded-[24px] sm:rounded-[44px] md:rounded-[52px] border-4 sm:border-8 md:border-[12px] border-[#06090D] bg-[#0B1117] overflow-hidden ring-1 ring-[#1E2933] shadow-[0_0_0_1px_rgba(30,41,51,0.6),0_30px_90px_-20px_rgba(6,9,13,0.98)] p-5 sm:p-10 md:p-12 lg:p-16 transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(30,41,51,0.9),0_35px_100px_-20px_rgba(59,130,246,0.18)]"
       >
         
         {/* Specular top hairline highlight */}
@@ -82,8 +82,6 @@ export default function FinalCTA() {
           {/* Left Column: Eyebrow + Headline + Copy + CTA Buttons      */}
           {/* ────────────────────────────────────────────────────────── */}
           <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-start text-left w-full">
-          
-
             {/* Dominant Headline */}
             <motion.h2
               custom={0.08}
@@ -91,7 +89,7 @@ export default function FinalCTA() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="text-3xl sm:text-5xl md:text-6xl lg:text-[3.9rem] xl:text-[4.2rem] font-black tracking-[-0.035em] text-[#F1F5F9] leading-[1.04] lg:leading-[0.98] font-sans drop-shadow-md mb-4 sm:mb-6"
+              className="text-2xl sm:text-5xl md:text-6xl lg:text-[3.9rem] xl:text-[4.2rem] font-black tracking-[-0.035em] text-[#F1F5F9] leading-[1.06] lg:leading-[0.98] font-sans drop-shadow-md mb-3.5 sm:mb-6"
             >
               Ready to start the <br />
               <span className="text-gradient-primary drop-shadow-[0_0_35px_rgba(103,232,249,0.35)]">
@@ -118,14 +116,14 @@ export default function FinalCTA() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 w-full sm:w-auto mb-8 sm:mb-10"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto mb-6 sm:mb-10"
             >
               {/* Primary Glowing Pill CTA */}
               <Link
                 href="/Business"
                 data-cursor="cta"
                 data-cursor-magnetic="true"
-                className="group relative inline-flex items-center justify-center gap-2.5 px-8 sm:px-9 py-3.5 sm:py-4 text-xs sm:text-sm font-bold text-[#F1F5F9] rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] transition-all duration-300 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_45px_rgba(6,182,212,0.85)] -translate-y-0 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3 sm:py-4 text-xs sm:text-sm font-bold text-[#F1F5F9] rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] transition-all duration-300 shadow-[0_0_30px_rgba(59,130,246,0.5)] hover:shadow-[0_0_45px_rgba(6,182,212,0.85)] -translate-y-0 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] min-h-[46px] sm:min-h-[52px]"
               >
                 <span>Build Your AI</span>
                 <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />
@@ -135,7 +133,7 @@ export default function FinalCTA() {
               <a
                 href="#how-it-works"
                 data-cursor="interactive"
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 text-xs sm:text-sm font-semibold text-[#F1F5F9] hover:text-[#67E8F9] rounded-full bg-[#101820] hover:bg-[#101820]/80 border border-[#1E2933] hover:border-[#3B82F6]/50 backdrop-blur-xl transition-all duration-200 shadow-sm active:scale-[0.98] min-h-[48px] sm:min-h-[52px]"
+                className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-[#F1F5F9] hover:text-[#67E8F9] rounded-full bg-[#101820] hover:bg-[#101820]/80 border border-[#1E2933] hover:border-[#3B82F6]/50 backdrop-blur-xl transition-all duration-200 shadow-sm active:scale-[0.98] min-h-[46px] sm:min-h-[52px]"
               >
                 <span>Explore Workflow</span>
               </a>
@@ -148,7 +146,7 @@ export default function FinalCTA() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              className="flex flex-wrap items-center gap-3 sm:gap-6 text-[10px] sm:text-xs text-[#94A3B8] font-mono pt-2 border-t border-[#1E2933] w-full"
+              className="flex flex-wrap items-center gap-2.5 sm:gap-6 text-[10px] sm:text-xs text-[#94A3B8] font-mono pt-2 border-t border-[#1E2933] w-full"
             >
               <span className="flex items-center gap-1.5">
                 <Zap size={12} className="text-[#3B82F6]" />
@@ -171,7 +169,7 @@ export default function FinalCTA() {
           {/* ────────────────────────────────────────────────────────── */}
           {/* Right Column: Interactive 3D AI Intelligence Core Scene   */}
           {/* ────────────────────────────────────────────────────────── */}
-          <div className="lg:col-span-6 xl:col-span-6 relative flex items-center justify-center w-full min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] xl:min-h-[680px] h-[460px] sm:h-[540px] lg:h-[620px] xl:h-[680px]">
+          <div className="lg:col-span-6 xl:col-span-6 relative flex items-center justify-center w-full min-h-[320px] sm:min-h-[480px] lg:min-h-[620px] xl:min-h-[680px] h-[320px] sm:h-[480px] lg:h-[620px] xl:h-[680px]">
             
             {/* Ambient Radial Vignette behind 3D Object */}
             <div className="absolute inset-0 rounded-[32px] bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(59,130,246,0.15)_0%,rgba(6,182,212,0.06)_45%,transparent_80%)] pointer-events-none" />

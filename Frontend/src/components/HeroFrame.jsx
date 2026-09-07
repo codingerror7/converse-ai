@@ -25,10 +25,10 @@ export default function HeroFrame() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-7 overflow-hidden bg-[#06090D] select-none">
+    <section className="relative w-full min-h-[100svh] sm:min-h-screen flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-7 overflow-hidden bg-[#06090D] select-none">
       
       {/* Dominant Outer Chassis Frame with Responsive Scaling */}
-      <div className="relative w-full max-w-[1580px] h-[100svh] sm:h-[94vh] min-h-[580px] max-h-[920px] rounded-[28px] sm:rounded-[44px] md:rounded-[56px] border-4 sm:border-8 md:border-[14px] border-[#06090D] bg-[#06090D] overflow-hidden ring-1 ring-[#1E2933] shadow-[0_0_0_1px_rgba(30,41,51,0.6),0_30px_90px_-20px_rgba(6,9,13,0.98)] flex flex-col justify-between z-10">
+      <div className="relative w-full max-w-[1580px] h-[96svh] sm:h-[94vh] min-h-[560px] max-h-[920px] rounded-[24px] sm:rounded-[44px] md:rounded-[56px] border-4 sm:border-8 md:border-[14px] border-[#06090D] bg-[#06090D] overflow-hidden ring-1 ring-[#1E2933] shadow-[0_0_0_1px_rgba(30,41,51,0.6),0_30px_90px_-20px_rgba(6,9,13,0.98)] flex flex-col justify-between z-10">
         
         {/* Full-Bleed Video Surface clipped inside the rounded chassis */}
         <VideoBackground />
@@ -36,10 +36,10 @@ export default function HeroFrame() {
         {/* Structural Top Pods: Brand Logo + Auth Controls */}
         <NavbarPods />
 
-        {/* Center Screen: Left-Center Headline & Right-Side Frosted Cards */}
-        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-center lg:items-center justify-between px-4 sm:px-10 lg:px-16 pt-16 sm:pt-28 pb-16 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
+        {/* Center Screen: Left-Center Headline (Desktop: With Floating Cards, Mobile: Clean & Focused) */}
+        <div className="relative z-20 flex-1 flex flex-col lg:flex-row items-start lg:items-center justify-center lg:justify-between px-5 sm:px-10 lg:px-16 pt-20 sm:pt-28 pb-20 sm:pb-20 gap-6 sm:gap-8 lg:gap-10 my-auto w-full">
           
-          {/* Left-Center Hero Typography */}
+          {/* Hero Typography Container (Responsive, No Overflow) */}
           <div className="w-full max-w-[580px] text-left">
 
             {/* Primary Headline */}
@@ -48,7 +48,7 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-[2.25rem] leading-[1.02] sm:text-5xl md:text-6xl lg:text-[4.85rem] font-black tracking-[-0.04em] text-[#F1F5F9] lg:leading-[0.98] font-sans drop-shadow-md"
+              className="text-[2.15rem] leading-[1.06] sm:text-5xl md:text-6xl lg:text-[4.85rem] font-black tracking-[-0.035em] text-[#F1F5F9] lg:leading-[0.98] font-sans drop-shadow-md"
             >
               Build an AI that <br />
               <span className="text-gradient-primary drop-shadow-[0_0_35px_rgba(103,232,249,0.35)]">
@@ -62,15 +62,15 @@ export default function HeroFrame() {
               variants={fadeIn}
               initial="hidden"
               animate="visible"
-              className="text-xs sm:text-sm md:text-[15px] text-[#94A3B8] leading-relaxed max-w-[440px] mt-3 sm:mt-5 font-normal"
+              className="text-xs sm:text-sm md:text-[15px] text-[#94A3B8] leading-relaxed max-w-[340px] sm:max-w-[440px] mt-3.5 sm:mt-5 font-normal"
             >
               Build a custom chatbot tailored to your purpose, personality, and knowledge base—without complex infrastructure or AI overhead.
             </motion.p>
 
           </div>
 
-          {/* Right-Side Stacked Frosted Glass Cards (Responsive position) */}
-          <div className="w-full lg:w-auto flex justify-start sm:justify-center lg:justify-end shrink-0">
+          {/* Right-Side Stacked Frosted Glass Cards (Visible strictly on Desktop lg+, hidden on Mobile) */}
+          <div className="hidden lg:flex lg:w-auto justify-end shrink-0">
             <FloatingCards />
           </div>
 
@@ -79,7 +79,7 @@ export default function HeroFrame() {
         {/* Bottom Bar: Left Pill + Center Solid Notch + Right Indicator */}
         <div className="relative z-30 flex items-end justify-between px-4 sm:px-10 pb-0 pointer-events-none w-full">
           
-          {/* Bottom-Left Frosted Glass Workflow Pill */}
+          {/* Bottom-Left Frosted Glass Workflow Pill (Desktop only) */}
           <motion.a
             href="#how-it-works"
             initial={{ opacity: 0, y: 15 }}
@@ -100,20 +100,20 @@ export default function HeroFrame() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="pointer-events-auto mx-auto absolute left-1/2 -translate-x-1/2 bottom-0 bg-[#06090D] px-5 sm:px-9 py-2.5 sm:py-3.5 rounded-t-[18px] sm:rounded-t-[28px] border-t border-x border-[#1E2933] shadow-[0_-12px_35px_rgba(6,9,13,0.95)] flex items-center justify-center"
+            className="pointer-events-auto mx-auto absolute left-1/2 -translate-x-1/2 bottom-0 bg-[#06090D] px-4 sm:px-9 py-2.5 sm:py-3.5 rounded-t-[18px] sm:rounded-t-[28px] border-t border-x border-[#1E2933] shadow-[0_-12px_35px_rgba(6,9,13,0.95)] flex items-center justify-center z-30"
           >
             <Link
               href="/Business"
               data-cursor="cta"
               data-cursor-magnetic="true"
-              className="group px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] text-[#F1F5F9] text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(59,130,246,0.45)] hover:shadow-[0_0_35px_rgba(6,182,212,0.7)] active:scale-95 whitespace-nowrap min-h-[42px] sm:min-h-[46px] flex items-center gap-2"
+              className="group px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] text-[#F1F5F9] text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(59,130,246,0.45)] hover:shadow-[0_0_35px_rgba(6,182,212,0.7)] active:scale-95 whitespace-nowrap min-h-[44px] sm:min-h-[46px] flex items-center gap-2"
             >
               <span>Build Your AI</span>
               <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </motion.div>
 
-          {/* Symmetrical right indicator pill */}
+          {/* Symmetrical right indicator pill (Desktop only) */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}

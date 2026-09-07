@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/pagination";
 
 @theme {
   --color-page-bg: #06090D;
@@ -134,4 +136,31 @@
   background: linear-gradient(135deg, #F1F5F9 20%, #67E8F9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Custom Swiper Pagination Styling */
+.how-it-works-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.how-it-works-pagination .swiper-pagination-bullet {
+  width: 7px;
+  height: 7px;
+  background: #1E2933;
+  opacity: 0.8;
+  border-radius: 9999px;
+  transition: all 250ms ease;
+  cursor: pointer;
+}
+
+.how-it-works-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  height: 7px;
+  background: linear-gradient(90deg, #3B82F6, #06B6D4);
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  opacity: 1;
 }

@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check, ArrowUp, Sparkles, Bot, Sliders, Layers } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 
 /* -------------------------------------------------------------------------- */
 /* Sub-Component: Step 01 Miniature Category Selector UI (Interactive)       */
@@ -254,6 +256,55 @@ function MiniChatUI() {
 }
 
 /* -------------------------------------------------------------------------- */
+/* Card Item Renderer Component                                               */
+/* -------------------------------------------------------------------------- */
+function StepCardItem({ step }) {
+  return (
+    <div
+      className={`h-full relative flex flex-col justify-between p-5 sm:p-7 rounded-[22px] sm:rounded-[28px] bg-[#101820] backdrop-blur-xl border transition-all duration-300 shadow-[0_20px_50px_rgba(6,9,13,0.8)] group text-left z-10 overflow-hidden ${
+        step.isFinal
+          ? 'border-[#1E2933] hover:border-[#3B82F6]/60 shadow-[0_0_45px_rgba(59,130,246,0.12)]'
+          : 'border-[#1E2933] hover:border-[#3B82F6]/45'
+      }`}
+    >
+      {/* Specular top hairline */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#67E8F9]/30 to-transparent" />
+
+      {/* Step Backlight Glow */}
+      <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-[#3B82F6]/10 blur-2xl pointer-events-none group-hover:bg-[#06B6D4]/20 transition-colors" />
+
+      {/* Top Header: Step Number & Title */}
+      <div className="mb-3.5 sm:mb-5">
+        <div className="flex items-baseline justify-between mb-2 sm:mb-3">
+          <span className="text-2xl sm:text-5xl font-black font-mono text-[#94A3B8]/30 group-hover:text-[#3B82F6]/80 transition-colors duration-300">
+            {step.number}
+          </span>
+          <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-[#67E8F9] bg-[#06B6D4]/15 border border-[#06B6D4]/30 px-2.5 py-0.5 rounded-full">
+            {step.tag}
+          </span>
+        </div>
+
+        <h3 className="text-base sm:text-2xl font-bold tracking-tight text-[#F1F5F9] mb-1.5 font-sans">
+          {step.title}
+        </h3>
+        
+        <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
+          {step.description}
+        </p>
+      </div>
+
+      {/* Center / Bottom: Miniature Visual UI Component */}
+      <div className="mt-2.5 pt-2.5 sm:mt-4 sm:pt-4 border-t border-[#1E2933] transform group-hover:scale-[1.01] transition-transform duration-300">
+        {step.renderUI()}
+      </div>
+
+      {/* Bottom Subtle Indicator Streak */}
+      <div className="absolute inset-x-8 bottom-0 h-px bg-gradient-to-r from-transparent via-[#3B82F6]/0 group-hover:via-[#3B82F6]/50 to-transparent transition-all duration-300" />
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /* Main HowItWorks Component                                                  */
 /* -------------------------------------------------------------------------- */
 export default function HowItWorks() {
@@ -289,7 +340,7 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative w-full bg-[#0B1117] py-20 sm:py-28 lg:py-24 border-t border-[#1E2933] overflow-hidden"
+      className="relative w-full bg-[#0B1117] py-16 sm:py-24 lg:py-24 border-t border-[#1E2933] overflow-hidden select-none"
     >
       {/* Background ambient lighting */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full bg-[#3B82F6]/8 blur-[140px] pointer-events-none" />
@@ -297,15 +348,13 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="max-w-2xl text-left mb-12 sm:mb-16">
-
-
+        <div className="max-w-2xl text-left mb-8 sm:mb-14">
           <motion.h2
             initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: prefersReducedMotion ? 0.01 : 0.55, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl md:text-6xl font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.05]"
+            className="text-2xl sm:text-5xl md:text-6xl font-black tracking-[-0.035em] text-[#F1F5F9] font-sans leading-[1.05]"
           >
             From idea to AI in <br className="hidden sm:inline" />
             <span className="text-gradient-primary">minutes.</span>
@@ -316,17 +365,16 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: prefersReducedMotion ? 0.01 : 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-3 sm:mt-4 text-xs sm:text-base text-[#94A3B8] leading-relaxed max-w-lg font-normal"
+            className="mt-2.5 sm:mt-4 text-xs sm:text-base text-[#94A3B8] leading-relaxed max-w-lg font-normal"
           >
             Create, tune, and test an intelligent chatbot tailored precisely to your workflow in three seamless steps.
           </motion.p>
         </div>
 
-        {/* Connected 3-Step Process System */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 items-stretch">
-          
+        {/* ─── DESKTOP VIEW: Connected 3-Column Grid (100% Unchanged) ─── */}
+        <div className="hidden lg:grid grid-cols-3 gap-6 lg:gap-8 items-stretch relative">
           {/* Subtle Desktop Connecting Glowing Line */}
-          <div className="hidden lg:block absolute top-14 inset-x-[12%] h-px bg-gradient-to-r from-transparent via-[#3B82F6]/35 to-transparent pointer-events-none z-0" />
+          <div className="absolute top-14 inset-x-[12%] h-px bg-gradient-to-r from-transparent via-[#3B82F6]/35 to-transparent pointer-events-none z-0" />
 
           {steps.map((step, idx) => (
             <motion.div
@@ -340,48 +388,50 @@ export default function HowItWorks() {
                 ease: [0.16, 1, 0.3, 1],
               }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className={`relative flex flex-col justify-between p-5 sm:p-7 rounded-[24px] sm:rounded-[28px] bg-[#101820] backdrop-blur-xl border transition-all duration-300 shadow-[0_20px_50px_rgba(6,9,13,0.8)] group text-left z-10 overflow-hidden ${
-                step.isFinal
-                  ? 'border-[#1E2933] hover:border-[#3B82F6]/60 shadow-[0_0_45px_rgba(59,130,246,0.12)]'
-                  : 'border-[#1E2933] hover:border-[#3B82F6]/45'
-              }`}
+              className="h-full"
             >
-              {/* Specular top hairline */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#67E8F9]/30 to-transparent" />
-
-              {/* Step Backlight Glow */}
-              <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-[#3B82F6]/10 blur-2xl pointer-events-none group-hover:bg-[#06B6D4]/20 transition-colors" />
-
-              {/* Top Header: Step Number & Title */}
-              <div className="mb-4 sm:mb-5">
-                <div className="flex items-baseline justify-between mb-2 sm:mb-3">
-                  <span className="text-3xl sm:text-5xl font-black font-mono text-[#94A3B8]/30 group-hover:text-[#3B82F6]/80 transition-colors duration-300">
-                    {step.number}
-                  </span>
-                  <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-[#67E8F9] bg-[#06B6D4]/15 border border-[#06B6D4]/30 px-2.5 py-0.5 rounded-full">
-                    {step.tag}
-                  </span>
-                </div>
-
-                <h3 className="text-lg sm:text-2xl font-bold tracking-tight text-[#F1F5F9] mb-1.5 font-sans">
-                  {step.title}
-                </h3>
-                
-                <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-
-              {/* Center / Bottom: Miniature Visual UI Component */}
-              <div className="mt-3 pt-3 sm:mt-4 sm:pt-4 border-t border-[#1E2933] transform group-hover:scale-[1.01] transition-transform duration-300">
-                {step.renderUI()}
-              </div>
-
-              {/* Bottom Subtle Indicator Streak */}
-              <div className="absolute inset-x-8 bottom-0 h-px bg-gradient-to-r from-transparent via-[#3B82F6]/0 group-hover:via-[#3B82F6]/50 to-transparent transition-all duration-300" />
+              <StepCardItem step={step} />
             </motion.div>
           ))}
+        </div>
 
+        {/* ─── MOBILE VIEW: Smooth Horizontal Swiper Carousel with Peek ─── */}
+        <div className="block lg:hidden w-full relative">
+          <Swiper
+            modules={[Pagination]}
+            pagination={{
+              clickable: true,
+              el: '.how-it-works-pagination',
+            }}
+            slidesPerView={1.12}
+            spaceBetween={14}
+            breakpoints={{
+              360: {
+                slidesPerView: 1.15,
+                spaceBetween: 14,
+              },
+              480: {
+                slidesPerView: 1.25,
+                spaceBetween: 16,
+              },
+              640: {
+                slidesPerView: 1.45,
+                spaceBetween: 18,
+              },
+            }}
+            grabCursor={true}
+            touchEventsTarget="container"
+            className="w-full !overflow-visible"
+          >
+            {steps.map((step) => (
+              <SwiperSlide key={step.number} className="!h-auto pb-1">
+                <StepCardItem step={step} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* Custom Styled Cyan Glow Pagination */}
+          <div className="how-it-works-pagination" />
         </div>
 
       </div>
