@@ -80,7 +80,7 @@ export default function AIOrbCore({ isHovered = false, prefersReducedMotion = fa
         />
       </mesh>
 
-      {/* Geodesic Faceted Wireframe Shell */}
+
       <mesh ref={wireframeRef}>
         <icosahedronGeometry args={[0.98, 2]} />
         <meshStandardMaterial
