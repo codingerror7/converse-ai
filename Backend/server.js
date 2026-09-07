@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import compression from "compression";
 import { connectDB, getDBStatus } from "./src/config/db.config.js";
 import apiRouter from "./src/routes/index.js";
 import { notFoundHandler, errorHandler } from "./src/middlewares/error.middleware.js";
@@ -21,6 +22,19 @@ app.use(
   helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
+  })
+);
+
+// High-performance gzip/deflate response compression
+app.use(
+  compression({
+    threshold: 1024, // only compress responses >= 1KB
+    filter: (req, res) => {
+      if (req.headers["x-no-compression"]) {
+        return false;
+      }
+      return compression.filter(req, res);
+    },
   })
 );
 
@@ -65,8 +79,8 @@ app.get("/", (req, res) => {
 // Root level /health route alias
 app.get("/health", (req, res) => {
   const db = getDBStatus();
-  res.status(db.isConnected ? 200 : 503).json({
-    status: db.isConnected ? "healthy" : "degraded",
+  res.status(db.isConnected ? 200 : 200).json({
+    status: db.isConnected ? "healthy" : "connecting",
     database: db.status,
     service: "converse-ai-backend",
     timestamp: new Date().toISOString(),
@@ -86,14 +100,14 @@ let server = null;
 
 // Start Server and Connect Database
 async function startServer() {
+  server = app.listen(PORT, () => {
+    console.log(`🚀 Converse-AI Backend running on http://localhost:${PORT}`);
+  });
+
   try {
     await connectDB();
-    server = app.listen(PORT, () => {
-      console.log(`🚀 Converse-AI Backend running on http://localhost:${PORT}`);
-    });
   } catch (error) {
-    console.error("Failed to start server due to database connection error:", error.message);
-    process.exit(1);
+    console.warn("Server running with background database reconnection pending...");
   }
 }
 

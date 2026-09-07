@@ -8,34 +8,21 @@ export default function ParticleConstellation({ isHovered = false, prefersReduce
   const pointsRef = useRef();
 
   // Pre-generate stable spherical particle distribution
-  const [positions, originalPositions, phases] = useMemo(() => {
+  const positions = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const orig = new Float32Array(count * 3);
-    const ph = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
       // Golden spiral distribution on sphere with variable radius
       const phi = Math.acos(1 - 2 * (i + 0.5) / count);
       const theta = Math.PI * (1 + Math.sqrt(5)) * i;
-      
       const r = 1.35 + Math.random() * 1.5; // Radius between 1.35 and 2.85
 
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-
-      pos[i * 3] = x;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = z;
-
-      orig[i * 3] = x;
-      orig[i * 3 + 1] = y;
-      orig[i * 3 + 2] = z;
-
-      ph[i] = Math.random() * Math.PI * 2;
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
     }
 
-    return [pos, orig, ph];
+    return pos;
   }, [count]);
 
   useFrame((state, delta) => {
@@ -45,28 +32,12 @@ export default function ParticleConstellation({ isHovered = false, prefersReduce
     const t = state.clock.getElapsedTime();
     const speedMultiplier = (isHovered ? 1.4 : 1.0) * motionScale;
 
-    // Slow ambient rotation of the entire constellation
+    // Fast GPU-friendly transform: rotation + breathing scale
     pointsRef.current.rotation.y += delta * 0.12 * speedMultiplier;
     pointsRef.current.rotation.x = Math.sin(t * 0.4) * 0.08;
 
-    const positionAttribute = pointsRef.current.geometry.attributes.position;
-    const array = positionAttribute.array;
-
-    for (let i = 0; i < count; i++) {
-      const idx = i * 3;
-      const wave = Math.sin(t * 1.8 + phases[i]) * 0.06 * speedMultiplier;
-      
-      // Gentle radial breathing of each particle
-      const ox = originalPositions[idx];
-      const oy = originalPositions[idx + 1];
-      const oz = originalPositions[idx + 2];
-
-      array[idx] = ox + ox * wave;
-      array[idx + 1] = oy + oy * wave;
-      array[idx + 2] = oz + oz * wave;
-    }
-
-    positionAttribute.needsUpdate = true;
+    const breath = 1 + Math.sin(t * 1.5 * speedMultiplier) * 0.04;
+    pointsRef.current.scale.set(breath, breath, breath);
   });
 
   return (

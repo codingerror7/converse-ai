@@ -1,14 +1,31 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { motion, useReducedMotion, useInView } from 'framer-motion';
 import { ArrowRight, Sparkles, Zap, ShieldCheck, Cpu, Activity } from 'lucide-react';
-import AIIntelligenceCoreScene from './cta-3d/AIIntelligenceCoreScene';
+import { CSSAIFallback } from './cta-3d/AIIntelligenceCoreScene';
+
+// Dynamically import heavy Three.js 3D WebGL Canvas to keep initial landing page bundle ultra-light
+const AIIntelligenceCoreScene = dynamic(
+  () => import('./cta-3d/AIIntelligenceCoreScene'),
+  {
+    ssr: false,
+    loading: () => <CSSAIFallback isHovered={false} />,
+  }
+);
 
 export default function FinalCTA() {
   const prefersReducedMotion = useReducedMotion();
   const [isHovered, setIsHovered] = useState(false);
+  const containerRef = useRef(null);
+  
+  // Lazy mount 3D Canvas only when viewport is within 250px of the CTA section
+  const isInViewport = useInView(containerRef, {
+    once: true,
+    margin: "250px 0px",
+  });
 
   const fadeIn = {
     hidden: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
@@ -24,7 +41,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className="relative w-full bg-[#06090D] py-16 sm:py-24 lg:py-28 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
+    <section ref={containerRef} className="relative w-full bg-[#06090D] py-16 sm:py-24 lg:py-28 px-3 sm:px-6 lg:px-8 overflow-hidden select-none">
       
       {/* Master Chassis Container with Signature Framing */}
       <div 
@@ -185,12 +202,16 @@ export default function FinalCTA() {
               </span>
             </motion.div>
 
-            {/* Interactive 3D Canvas Mount */}
+            {/* Interactive 3D Canvas Mount (Lazy-mounted with instant CSS fallback) */}
             <div className="w-full h-full relative z-10 flex items-center justify-center">
-              <AIIntelligenceCoreScene
-                isHovered={isHovered}
-                prefersReducedMotion={prefersReducedMotion}
-              />
+              {isInViewport ? (
+                <AIIntelligenceCoreScene
+                  isHovered={isHovered}
+                  prefersReducedMotion={prefersReducedMotion}
+                />
+              ) : (
+                <CSSAIFallback isHovered={isHovered} />
+              )}
             </div>
 
           </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -23,6 +23,61 @@ import {
 } from 'lucide-react';
 import { getChatbotAPI, sendChatMessageAPI } from '../../../src/lib/api';
 
+/* -------------------------------------------------------------------------- */
+/* Memoized Individual Chat Message Component (Prevents list re-renders)      */
+/* -------------------------------------------------------------------------- */
+const ChatMessageItem = memo(function ChatMessageItem({ msg, prefersReducedMotion }) {
+  const isUser = msg.role === 'user';
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className={`flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
+    >
+      {/* Bot Avatar for assistant messages */}
+      {!isUser && (
+        <div className="w-7 h-7 rounded-lg bg-[#3B82F6]/15 border border-[#3B82F6]/30 flex items-center justify-center text-[#3B82F6] shrink-0 mt-1">
+          <Bot size={13} />
+        </div>
+      )}
+
+      {/* Message Bubble */}
+      <div
+        className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-xs sm:text-[13.5px] leading-relaxed shadow-sm text-left ${
+          isUser
+            ? 'bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] text-[#F1F5F9] font-medium rounded-tr-xs shadow-[0_0_20px_rgba(59,130,246,0.25)]'
+            : 'bg-[#101820] border border-[#1E2933] text-[#F1F5F9] rounded-tl-xs'
+        }`}
+      >
+        <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+        <div
+          className={`text-[9px] font-mono mt-1.5 flex justify-end ${
+            isUser ? 'text-[#F1F5F9]/60' : 'text-[#94A3B8]/50'
+          }`}
+        >
+          {msg.timestamp}
+        </div>
+      </div>
+
+      {/* User Avatar */}
+      {isUser && (
+        <div className="w-7 h-7 rounded-lg bg-[#101820] border border-[#1E2933] flex items-center justify-center text-[#94A3B8] shrink-0 mt-1">
+          <User size={13} />
+        </div>
+      )}
+    </motion.div>
+  );
+});
+
+const QUICK_PROMPTS = [
+  'What services do you offer?',
+  'Tell me about your business',
+  'How do I get started?',
+  'What are your specialties?',
+];
+
 export default function ChatbotPage() {
   const params = useParams();
   const router = useRouter();
@@ -43,18 +98,12 @@ export default function ChatbotPage() {
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-
-  // Quick prompt suggestions tailored for business interactions
-  const quickPrompts = [
-    'What services do you offer?',
-    'Tell me about your business',
-    'How do I get started?',
-    'What are your specialties?',
-  ];
+  const activeAbortControllerRef = useRef(null);
+  const isSendingRef = useRef(false);
 
   // Fetch Chatbot Public Profile on Mount
   useEffect(() => {
-    let isMounted = true;
+    const abortController = new AbortController();
 
     async function loadChatbot() {
       if (!chatbotId) return;
@@ -62,8 +111,8 @@ export default function ChatbotPage() {
       setErrorMessage(null);
 
       try {
-        const result = await getChatbotAPI(chatbotId);
-        if (isMounted && result.success && result.chatbot) {
+        const result = await getChatbotAPI(chatbotId, abortController.signal);
+        if (result.success && result.chatbot) {
           setChatbot(result.chatbot);
 
           // Initialize with personalized welcome greeting
@@ -78,25 +127,32 @@ export default function ChatbotPage() {
           setMessages([initialGreeting]);
         }
       } catch (err) {
-        console.error('Failed to load chatbot:', err);
-        if (isMounted) {
+        if (err.name !== 'AbortError') {
+          console.error('Failed to load chatbot:', err);
           setErrorMessage(
             err.message || 'Chatbot not found or link has expired.'
           );
         }
       } finally {
-        if (isMounted) {
-          setIsLoadingProfile(false);
-        }
+        setIsLoadingProfile(false);
       }
     }
 
     loadChatbot();
 
     return () => {
-      isMounted = false;
+      abortController.abort();
     };
   }, [chatbotId]);
+
+  // Clean up any ongoing request on unmount
+  useEffect(() => {
+    return () => {
+      if (activeAbortControllerRef.current) {
+        activeAbortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   // Auto-scroll to bottom of conversation thread
   useEffect(() => {
@@ -106,7 +162,11 @@ export default function ChatbotPage() {
   // Send Message Handler
   const handleSendMessage = useCallback(async (textToSend) => {
     const text = (textToSend || inputText).trim();
-    if (!text || isSending || !chatbot) return;
+    if (!text || isSendingRef.current || !chatbot) return;
+
+    // Double-submit guard
+    isSendingRef.current = true;
+    setIsSending(true);
 
     const userMessageId = `user-${Date.now()}`;
     const userMsg = {
@@ -120,7 +180,6 @@ export default function ChatbotPage() {
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     setInputText('');
-    setIsSending(true);
     setErrorMessage(null);
     setLastFailedMessage(null);
 
@@ -132,11 +191,19 @@ export default function ChatbotPage() {
         content: m.content,
       }));
 
+    // Abort controller for cancellation
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    activeAbortControllerRef.current = controller;
+
     try {
       const responseData = await sendChatMessageAPI({
         chatbotId: chatbot.chatbotId,
         message: text,
         conversationHistory,
+        signal: controller.signal,
       });
 
       const botReply = {
@@ -148,18 +215,22 @@ export default function ChatbotPage() {
 
       setMessages((prev) => [...prev, botReply]);
     } catch (err) {
-      console.error('Failed to send message:', err);
-      setErrorMessage(
-        err.message || 'Unable to get a response right now. Please try asking again.'
-      );
-      setLastFailedMessage(text);
+      if (err.name !== 'AbortError' && err.message !== 'Request was cancelled.') {
+        console.error('Failed to send message:', err);
+        setErrorMessage(
+          err.message || 'Unable to get a response right now. Please try asking again.'
+        );
+        setLastFailedMessage(text);
+      }
     } finally {
+      isSendingRef.current = false;
       setIsSending(false);
+      activeAbortControllerRef.current = null;
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 100);
+      }, 50);
     }
-  }, [inputText, isSending, chatbot, messages]);
+  }, [inputText, chatbot, messages]);
 
   // Resilient Copy Public Link with Clipboard API & Fallback
   const handleCopyShareLink = () => {
@@ -197,6 +268,12 @@ export default function ChatbotPage() {
   // Clear / Reset Conversation
   const handleResetChat = () => {
     if (!chatbot) return;
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort();
+    }
+    isSendingRef.current = false;
+    setIsSending(false);
+
     const initialGreeting = {
       id: `welcome-${Date.now()}`,
       role: 'assistant',
@@ -279,43 +356,46 @@ export default function ChatbotPage() {
                 type="button"
                 onClick={handleResetChat}
                 data-cursor="interactive"
-                title="Restart chat"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#101820] hover:bg-[#101820]/80 border border-[#1E2933] text-[#94A3B8] hover:text-[#F1F5F9] transition-all cursor-pointer shadow-xs active:scale-95"
+                title="Reset Conversation"
+                className="p-1.5 rounded-full bg-[#101820] hover:bg-[#101820]/80 border border-[#1E2933] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] transition-all cursor-pointer shadow-xs active:scale-95"
               >
-                <RotateCcw size={12} />
+                <RotateCcw size={13} />
               </button>
             </>
           )}
 
-          {/* Build Your Own CTA Button */}
+          {/* Build New AI Button */}
           <Link
             href="/Business"
             data-cursor="cta"
-            className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] text-[#F1F5F9] text-xs font-bold tracking-tight shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] transition-all active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#3B82F6] hover:bg-[#2563EB] text-xs font-bold text-[#F1F5F9] shadow-[0_0_15px_rgba(59,130,246,0.35)] hover:shadow-[0_0_20px_rgba(59,130,246,0.55)] transition-all active:scale-95"
           >
-            <Plus size={12} strokeWidth={2.5} />
-            <span className="hidden sm:inline">Create Bot</span>
-            <span className="sm:hidden">New</span>
+            <Plus size={13} />
+            <span className="hidden sm:inline">New Bot</span>
           </Link>
         </div>
+
       </header>
 
       {/* ────────────────────────────────────────────────────────── */}
-      {/* Main Chat Workspace Chassis                                */}
+      {/* Main Center Stage: Chatbot Window Chassis                 */}
       {/* ────────────────────────────────────────────────────────── */}
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-2.5 sm:px-6 py-4 sm:py-6 w-full max-w-5xl mx-auto">
+      <main className="relative z-20 flex-1 flex flex-col items-center justify-center px-3 sm:px-6 py-4 sm:py-6 w-full max-w-5xl mx-auto">
         
-        {/* Loading Skeleton */}
         {isLoadingProfile ? (
-          <div className="w-full max-w-[760px] h-[620px] rounded-[28px] sm:rounded-[36px] border-4 sm:border-8 border-[#06090D] bg-[#0B1117] ring-1 ring-[#1E2933] p-8 flex flex-col items-center justify-center text-center">
-            <div className="w-10 h-10 border-2 border-[#3B82F6] border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-sm font-semibold text-[#F1F5F9]">Loading assistant persona...</p>
-            <p className="text-xs font-mono text-[#94A3B8]/60 mt-1">Synchronizing neural knowledge base</p>
+          /* Loading Skeleton State */
+          <div className="w-full max-w-[800px] h-[600px] rounded-[32px] border-4 border-[#06090D] bg-[#0B1117] ring-1 ring-[#1E2933] shadow-2xl flex flex-col items-center justify-center p-8">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#3B82F6] to-[#06B6D4] flex items-center justify-center animate-pulse mb-4">
+              <Bot size={24} className="text-[#06090D]" />
+            </div>
+            <p className="text-sm font-mono text-[#94A3B8] animate-pulse">
+              Initializing AI context stream...
+            </p>
           </div>
-        ) : !chatbot ? (
-          /* Not Found State */
-          <div className="w-full max-w-[580px] rounded-[28px] sm:rounded-[36px] border-4 sm:border-8 border-[#06090D] bg-[#0B1117] ring-1 ring-[#1E2933] p-8 sm:p-10 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 mx-auto mb-4">
+        ) : errorMessage && !chatbot ? (
+          /* Chatbot Not Found / Error State */
+          <div className="w-full max-w-[600px] rounded-[28px] border-2 border-[#1E2933] bg-[#0B1117] p-8 text-center shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-400 mx-auto mb-4">
               <AlertCircle size={24} />
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-[#F1F5F9] mb-2 font-sans">
@@ -380,54 +460,17 @@ export default function ChatbotPage() {
             </div>
 
             {/* ──────────────────────────────────────────────────────── */}
-            {/* Conversation Message Stream                              */}
+            {/* Conversation Message Stream (Memoized Render)            */}
             {/* ──────────────────────────────────────────────────────── */}
             <div className="relative z-10 flex-1 overflow-y-auto px-3.5 sm:px-6 py-4 space-y-3.5 select-text">
               
-              {messages.map((msg, index) => {
-                const isUser = msg.role === 'user';
-                return (
-                  <motion.div
-                    key={msg.id || index}
-                    initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className={`flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
-                  >
-                    {/* Bot Avatar for assistant messages */}
-                    {!isUser && (
-                      <div className="w-7 h-7 rounded-lg bg-[#3B82F6]/15 border border-[#3B82F6]/30 flex items-center justify-center text-[#3B82F6] shrink-0 mt-1">
-                        <Bot size={13} />
-                      </div>
-                    )}
-
-                    {/* Message Bubble */}
-                    <div
-                      className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-xs sm:text-[13.5px] leading-relaxed shadow-sm text-left ${
-                        isUser
-                          ? 'bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] text-[#F1F5F9] font-medium rounded-tr-xs shadow-[0_0_20px_rgba(59,130,246,0.25)]'
-                          : 'bg-[#101820] border border-[#1E2933] text-[#F1F5F9] rounded-tl-xs'
-                      }`}
-                    >
-                      <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                      <div
-                        className={`text-[9px] font-mono mt-1.5 flex justify-end ${
-                          isUser ? 'text-[#F1F5F9]/60' : 'text-[#94A3B8]/50'
-                        }`}
-                      >
-                        {msg.timestamp}
-                      </div>
-                    </div>
-
-                    {/* User Avatar */}
-                    {isUser && (
-                      <div className="w-7 h-7 rounded-lg bg-[#101820] border border-[#1E2933] flex items-center justify-center text-[#94A3B8] shrink-0 mt-1">
-                        <User size={13} />
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })}
+              {messages.map((msg, index) => (
+                <ChatMessageItem
+                  key={msg.id || index}
+                  msg={msg}
+                  prefersReducedMotion={prefersReducedMotion}
+                />
+              ))}
 
               {/* Thinking / Streaming Indicator */}
               {isSending && (
@@ -448,115 +491,90 @@ export default function ChatbotPage() {
                 </motion.div>
               )}
 
-              {/* Inline Network / API Error Banner with Retry */}
+              {/* Inline Error Notice with Retry */}
               {errorMessage && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex flex-wrap items-center justify-between gap-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center justify-between p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-400"
+                >
                   <div className="flex items-center gap-2">
-                    <AlertCircle size={14} className="text-rose-400 shrink-0" />
+                    <AlertCircle size={14} className="shrink-0" />
                     <span>{errorMessage}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {lastFailedMessage && (
-                      <button
-                        type="button"
-                        onClick={() => handleSendMessage(lastFailedMessage)}
-                        className="inline-flex items-center gap-1 text-xs text-[#06B6D4] hover:underline font-mono cursor-pointer"
-                      >
-                        <RefreshCw size={11} /> Retry
-                      </button>
-                    )}
+                  {lastFailedMessage && (
                     <button
                       type="button"
-                      onClick={() => setErrorMessage(null)}
-                      className="text-rose-400 hover:text-white font-mono text-xs px-1.5 py-0.5 rounded cursor-pointer"
+                      onClick={() => handleSendMessage(lastFailedMessage)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-500/20 hover:bg-red-500/30 font-medium text-[11px] transition-colors cursor-pointer"
                     >
-                      Dismiss
+                      <RefreshCw size={11} />
+                      Retry
                     </button>
-                  </div>
-                </div>
+                  )}
+                </motion.div>
               )}
 
               <div ref={messagesEndRef} />
             </div>
 
             {/* ──────────────────────────────────────────────────────── */}
-            {/* Quick Prompt Suggestions & Input Bar                     */}
+            {/* Quick Prompt Chips (Tailored Suggestions)                */}
             {/* ──────────────────────────────────────────────────────── */}
-            <div className="relative z-20 p-3 sm:p-4 bg-[#06090D]/90 backdrop-blur-xl border-t border-[#1E2933]">
-              
-              {/* Starter Quick Chips */}
-              {messages.length <= 2 && (
-                <div className="flex items-center gap-1.5 mb-2.5 overflow-x-auto pb-1 no-scrollbar text-left">
-                  <span className="text-[10px] text-[#94A3B8]/60 font-mono shrink-0 mr-1">Suggestions:</span>
-                  {quickPrompts.map((prompt) => (
-                    <button
-                      key={prompt}
-                      type="button"
-                      onClick={() => handleSendMessage(prompt)}
-                      disabled={isSending}
-                      data-cursor="interactive"
-                      className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-[#101820] hover:bg-[#3B82F6]/20 border border-[#1E2933] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] transition-all whitespace-nowrap cursor-pointer shrink-0 shadow-xs"
-                    >
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
-              )}
+            {messages.length <= 3 && (
+              <div className="relative z-10 px-4 sm:px-6 py-2 overflow-x-auto no-scrollbar flex items-center gap-2 border-t border-[#1E2933]/50 bg-[#06090D]/40">
+                {QUICK_PROMPTS.map((prompt, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleSendMessage(prompt)}
+                    disabled={isSending}
+                    data-cursor="interactive"
+                    className="shrink-0 text-[11px] px-3 py-1 rounded-full bg-[#101820] hover:bg-[#101820]/80 border border-[#1E2933] hover:border-[#3B82F6]/50 text-[#94A3B8] hover:text-[#F1F5F9] transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            )}
 
-              {/* Chat Form */}
+            {/* ──────────────────────────────────────────────────────── */}
+            {/* Input Composer Dock                                       */}
+            {/* ──────────────────────────────────────────────────────── */}
+            <div className="relative z-10 p-3 sm:p-4 bg-[#06090D] border-t border-[#1E2933]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage();
                 }}
-                className="flex items-center gap-2"
+                className="relative flex items-center"
               >
-                <div className="relative flex-1">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    maxLength={1500}
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    placeholder={`Ask ${chatbot.businessName} anything...`}
-                    disabled={isSending}
-                    className="w-full bg-[#0B1117] text-[#F1F5F9] placeholder:text-[#94A3B8]/40 text-xs sm:text-sm rounded-xl pl-4 pr-10 py-3 border border-[#1E2933] hover:border-[#1E2933]/80 focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6]/50 outline-none transition-all shadow-inner"
-                  />
-                  
-                  {/* Subtle input character limit */}
-                  {inputText.length > 1200 && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-mono text-rose-400">
-                      {1500 - inputText.length}
-                    </span>
-                  )}
-                </div>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  disabled={isSending}
+                  placeholder={`Ask ${chatbot.businessName} anything...`}
+                  maxLength={1500}
+                  className="w-full bg-[#101820] border border-[#1E2933] focus:border-[#3B82F6] rounded-full pl-4 sm:pl-5 pr-12 sm:pr-14 py-3 sm:py-3.5 text-xs sm:text-sm text-[#F1F5F9] placeholder-[#94A3B8]/60 focus:outline-hidden transition-all shadow-inner disabled:opacity-60"
+                />
 
                 <button
                   type="submit"
                   disabled={!inputText.trim() || isSending}
-                  data-cursor="cta"
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0 select-none ${
-                    inputText.trim() && !isSending
-                      ? 'bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] text-[#F1F5F9] shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] cursor-pointer active:scale-95'
-                      : 'bg-[#101820] border border-[#1E2933] text-[#94A3B8]/40 cursor-not-allowed'
-                  }`}
+                  data-cursor="interactive"
+                  className="absolute right-1.5 sm:right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] text-[#F1F5F9] flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(59,130,246,0.35)] active:scale-90 cursor-pointer"
                 >
-                  <Send size={15} className={inputText.trim() && !isSending ? 'translate-x-0.5' : ''} />
+                  <Send size={13} className="translate-x-[-0.5px]" />
                 </button>
               </form>
-
-              {/* Bottom Micro Footer */}
-              <div className="mt-2 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-[#94A3B8]/40 select-none">
-                <span>Powered by Converse-AI Intelligence Engine</span>
-                <span className="hidden sm:inline">Press Enter to send</span>
-              </div>
-
             </div>
 
           </div>
@@ -565,12 +583,17 @@ export default function ChatbotPage() {
       </main>
 
       {/* ────────────────────────────────────────────────────────── */}
-      {/* Footer                                                    */}
+      {/* Bottom Footer Telemetry Strip                             */}
       {/* ────────────────────────────────────────────────────────── */}
-      <footer className="relative z-20 w-full py-3 text-center select-none border-t border-[#1E2933]/40">
-        <p className="text-[10px] text-[#94A3B8]/40 font-mono">
-          Converse-AI • Real-Time Scoped AI Assistant
-        </p>
+      <footer className="relative z-30 w-full py-3 text-center border-t border-[#1E2933]/40 bg-[#06090D]">
+        <div className="flex items-center justify-center gap-4 text-[10px] font-mono text-[#94A3B8]">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4]" />
+            Converse-AI Engine v1.0
+          </span>
+          <span>•</span>
+          <span>Powered by GPT-4o-mini</span>
+        </div>
       </footer>
 
     </div>

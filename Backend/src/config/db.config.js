@@ -17,12 +17,18 @@ export const getDBStatus = () => {
   };
 };
 
+let connectionPromise = null;
+
 /**
- * Connect to MongoDB with connection reuse and event handlers
+ * Connect to MongoDB with automatic retry and event listeners
  */
 export const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
+  }
+
+  if (connectionPromise && mongoose.connection.readyState === 2) {
+    return connectionPromise;
   }
 
   const mongoUri = process.env.MONGODB_URI || process.env.MONGOOSE_URL;
@@ -32,25 +38,38 @@ export const connectDB = async () => {
     throw new Error("Missing MongoDB connection string in environment variables.");
   }
 
-  try {
-    const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 8000,
-      maxPoolSize: 10,
-    });
+  connectionPromise = (async () => {
+    try {
+      const conn = await mongoose.connect(mongoUri, {
+        serverSelectionTimeoutMS: 15000,
+        maxPoolSize: 10,
+        minPoolSize: 2,
+        maxIdleTimeMS: 60000,
+        socketTimeoutMS: 45000,
+      });
 
-    console.log(`MongoDB connected successfully: ${conn.connection.host}`);
+      console.log(`MongoDB connected successfully: ${conn.connection.host}`);
+      return conn;
+    } catch (error) {
+      console.warn("MongoDB initial connection attempt warning:", error.message);
+      // Auto-retry connection in background
+      setTimeout(() => {
+        if (mongoose.connection.readyState !== 1) {
+          console.log("Retrying MongoDB connection...");
+          connectDB().catch(() => {});
+        }
+      }, 5000);
+      throw error;
+    }
+  })();
 
-    mongoose.connection.on("error", (err) => {
-      console.error("MongoDB connection error:", err.message);
-    });
+  mongoose.connection.on("error", (err) => {
+    console.error("MongoDB connection error:", err.message);
+  });
 
-    mongoose.connection.on("disconnected", () => {
-      console.warn("MongoDB disconnected. Reconnection will be attempted automatically.");
-    });
+  mongoose.connection.on("disconnected", () => {
+    console.warn("MongoDB disconnected. Auto-reconnection active.");
+  });
 
-    return conn;
-  } catch (error) {
-    console.error("MongoDB initial connection failed:", error.message);
-    throw error;
-  }
+  return connectionPromise;
 };

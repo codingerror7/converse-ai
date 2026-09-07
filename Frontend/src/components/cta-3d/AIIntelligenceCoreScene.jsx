@@ -57,20 +57,19 @@ function SceneRig({ isHovered, prefersReducedMotion, deviceType }) {
     const targetPosY = pointer.y * (isMobile ? 0.04 : 0.08) + Math.sin(t * 1.2) * 0.04;
 
     // Responsive lerping
-    const lerpFactor = delta * (isHovered ? 4.2 : 2.8) * motionScale;
+    const lerpFactor = Math.min(delta * (isHovered ? 4.2 : 2.8) * motionScale, 0.2);
     masterGroupRef.current.rotation.x = THREE.MathUtils.lerp(masterGroupRef.current.rotation.x, targetRotX * motionScale, lerpFactor);
     masterGroupRef.current.rotation.y = THREE.MathUtils.lerp(masterGroupRef.current.rotation.y, targetRotY * motionScale, lerpFactor);
     masterGroupRef.current.position.x = THREE.MathUtils.lerp(masterGroupRef.current.position.x, targetPosX * motionScale, lerpFactor);
     masterGroupRef.current.position.y = THREE.MathUtils.lerp(masterGroupRef.current.position.y, targetPosY * motionScale, lerpFactor);
 
     // Responsive viewport-fitted scaling to ensure 100% visibility without clipping
-    // The model occupies ~75-80% of the canvas area, leaving comfortable breathing room around all outer rings/particles
     const safeDimension = Math.min(viewport.width, viewport.height);
     const targetOccupancy = isMobile ? 0.74 : isTablet ? 0.78 : 0.80;
     const baseFitScale = (safeDimension * targetOccupancy) / 4.4;
     const targetScale = (isHovered ? baseFitScale * 1.04 : baseFitScale) * (prefersReducedMotion ? 0.95 : 1);
     
-    masterGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), delta * 4);
+    masterGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), Math.min(delta * 4, 0.25));
   });
 
   return (
@@ -88,7 +87,7 @@ function SceneRig({ isHovered, prefersReducedMotion, deviceType }) {
         <ParticleConstellation
           isHovered={isHovered}
           prefersReducedMotion={prefersReducedMotion}
-          count={deviceType === 'mobile' ? 160 : 280}
+          count={deviceType === 'mobile' ? 140 : 240}
         />
         <FloatingTelemetryNodes isHovered={isHovered} prefersReducedMotion={prefersReducedMotion} />
       </group>
@@ -129,12 +128,14 @@ export function CSSAIFallback({ isHovered = false }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Master 3D Scene Component                                                  */
+/* Master 3D Scene Component with Visibility Throttling                        */
 /* -------------------------------------------------------------------------- */
 export default function AIIntelligenceCoreScene({ isHovered = false, prefersReducedMotion = false }) {
+  const containerRef = useRef(null);
   const [deviceType, setDeviceType] = useState('desktop'); // 'mobile' | 'tablet' | 'desktop'
   const [mounted, setMounted] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -170,7 +171,23 @@ export default function AIIntelligenceCoreScene({ isHovered = false, prefersRedu
 
     handleResize();
     window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
+
+    // IntersectionObserver to pause RAF loop when scrolled offscreen
+    let observer = null;
+    if (containerRef.current && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsVisible(entry.isIntersecting);
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (observer) observer.disconnect();
+    };
   }, []);
 
   if (!mounted) {
@@ -183,7 +200,10 @@ export default function AIIntelligenceCoreScene({ isHovered = false, prefersRedu
 
   return (
     <WebGLErrorBoundary fallback={<CSSAIFallback isHovered={isHovered} />}>
-      <div className="relative w-full h-full min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] xl:min-h-[680px] flex items-center justify-center overflow-hidden rounded-[28px]">
+      <div
+        ref={containerRef}
+        className="relative w-full h-full min-h-[460px] sm:min-h-[540px] lg:min-h-[620px] xl:min-h-[680px] flex items-center justify-center overflow-hidden rounded-[28px]"
+      >
         <Suspense fallback={<CSSAIFallback isHovered={isHovered} />}>
           <Canvas
             camera={{ position: [0, 0, 5.6], fov: 45 }}
@@ -194,7 +214,7 @@ export default function AIIntelligenceCoreScene({ isHovered = false, prefersRedu
               powerPreference: 'high-performance',
               preserveDrawingBuffer: false,
             }}
-            frameloop="always"
+            frameloop={isVisible ? "always" : "never"}
             className="pointer-events-auto h-full w-full"
             onCreated={({ gl }) => {
               gl.setClearColor('#000000', 0);

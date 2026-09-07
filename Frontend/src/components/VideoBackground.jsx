@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 
 export default function VideoBackground() {
+  const containerRef = useRef(null);
   const videoRef = useRef(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
@@ -16,21 +17,42 @@ export default function VideoBackground() {
       playPromise
         .then(() => setIsVideoLoaded(true))
         .catch(() => {
-          // Fallback if autoplay is deferred
+          // Autoplay was deferred or blocked by browser policy
         });
     }
+
+    // Pause video playback when scrolled offscreen to conserve CPU/GPU
+    let observer = null;
+    if (containerRef.current && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!videoRef.current) return;
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        },
+        { threshold: 0.05 }
+      );
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (observer) observer.disconnect();
+    };
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
-      {/* HTML5 Cinematic Video Element */}
+    <div ref={containerRef} className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0">
+      {/* HTML5 Cinematic Video Element with lightweight metadata preload */}
       <video
         ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-hidden="true"
         onLoadedData={() => setIsVideoLoaded(true)}
         disablePictureInPicture

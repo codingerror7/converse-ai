@@ -32,10 +32,6 @@ export default function CustomCursor() {
     let hoverType = 'default'; // 'default' | 'action' | 'card' | 'text' | 'hidden'
     let rafId = null;
 
-    // Subtle magnetic target offset
-    let magneticOffsetX = 0;
-    let magneticOffsetY = 0;
-
     const handlePointerMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
@@ -51,29 +47,6 @@ export default function CustomCursor() {
         if (dotRef.current) dotRef.current.style.opacity = '1';
         if (ringRef.current) ringRef.current.style.opacity = '1';
       }
-
-      // Check for magnetic elements nearby
-      const target = e.target;
-      const magneticEl = target ? target.closest('[data-cursor-magnetic], .group:has(a[href="/create"])') : null;
-      if (magneticEl) {
-        const rect = magneticEl.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const distFromCenter = Math.hypot(mouseX - centerX, mouseY - centerY);
-        if (distFromCenter < 90) {
-          magneticOffsetX = (centerX - mouseX) * 0.12;
-          magneticOffsetY = (centerY - mouseY) * 0.12;
-          // Clamp magnetic offset to max 5px
-          magneticOffsetX = Math.max(-5, Math.min(5, magneticOffsetX));
-          magneticOffsetY = Math.max(-5, Math.min(5, magneticOffsetY));
-        } else {
-          magneticOffsetX = 0;
-          magneticOffsetY = 0;
-        }
-      } else {
-        magneticOffsetX = 0;
-        magneticOffsetY = 0;
-      }
     };
 
     const handleMouseOver = (e) => {
@@ -81,23 +54,35 @@ export default function CustomCursor() {
       if (!target) return;
 
       // Check interactive types
-      const interactiveEl = target.closest('a, button, [role="button"], input[type="submit"], input[type="button"], [data-cursor="interactive"], [data-cursor="cta"]');
-      const cardEl = target.closest('[data-cursor="card"], .frosted-glass-card, [data-cursor="focus"]');
-      const textEl = target.closest('input[type="text"], input[type="email"], input[type="search"], textarea');
       const hiddenEl = target.closest('[data-cursor="none"]');
-
       if (hiddenEl) {
         hoverType = 'hidden';
-      } else if (textEl) {
-        hoverType = 'text';
-      } else if (interactiveEl) {
-        hoverType = 'action';
-      } else if (cardEl) {
-        hoverType = 'card';
-      } else {
-        hoverType = 'default';
+        updateCursorStyles();
+        return;
       }
 
+      const textEl = target.closest('input[type="text"], input[type="email"], input[type="search"], textarea');
+      if (textEl) {
+        hoverType = 'text';
+        updateCursorStyles();
+        return;
+      }
+
+      const interactiveEl = target.closest('a, button, [role="button"], input[type="submit"], input[type="button"], [data-cursor="interactive"], [data-cursor="cta"]');
+      if (interactiveEl) {
+        hoverType = 'action';
+        updateCursorStyles();
+        return;
+      }
+
+      const cardEl = target.closest('[data-cursor="card"], .frosted-glass-card, [data-cursor="focus"]');
+      if (cardEl) {
+        hoverType = 'card';
+        updateCursorStyles();
+        return;
+      }
+
+      hoverType = 'default';
       updateCursorStyles();
     };
 
@@ -186,17 +171,14 @@ export default function CustomCursor() {
 
     const renderLoop = () => {
       if (isInitialized) {
-        // Center dot follows mouse instantly + subtle magnetic attraction
-        const targetDotX = mouseX + magneticOffsetX;
-        const targetDotY = mouseY + magneticOffsetY;
-
+        // Center dot follows mouse instantly
         if (dotRef.current) {
-          dotRef.current.style.transform = `translate3d(${targetDotX}px, ${targetDotY}px, 0) translate(-50%, -50%)`;
+          dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
         }
 
         // Outer ring follows with buttery smooth lerp
-        ringX += (targetDotX - ringX) * lerpFactor;
-        ringY += (targetDotY - ringY) * lerpFactor;
+        ringX += (mouseX - ringX) * lerpFactor;
+        ringY += (mouseY - ringY) * lerpFactor;
 
         if (ringRef.current) {
           ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
