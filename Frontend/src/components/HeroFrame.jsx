@@ -103,7 +103,7 @@ export default function HeroFrame() {
             className="pointer-events-auto mx-auto absolute left-1/2 -translate-x-1/2 bottom-0 bg-[#06090D] px-5 sm:px-9 py-2.5 sm:py-3.5 rounded-t-[18px] sm:rounded-t-[28px] border-t border-x border-[#1E2933] shadow-[0_-12px_35px_rgba(6,9,13,0.95)] flex items-center justify-center"
           >
             <Link
-              href="/create"
+              href="/Business"
               data-cursor="cta"
               data-cursor-magnetic="true"
               className="group px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#06B6D4] hover:from-[#2563EB] hover:to-[#0891B2] text-[#F1F5F9] text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shadow-[0_0_25px_rgba(59,130,246,0.45)] hover:shadow-[0_0_35px_rgba(6,182,212,0.7)] active:scale-95 whitespace-nowrap min-h-[42px] sm:min-h-[46px] flex items-center gap-2"

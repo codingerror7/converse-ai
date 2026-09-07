@@ -21,8 +21,8 @@ export default function NavbarPods() {
             <span className="text-[11px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans transition-colors group-hover:text-[#F1F5F9]">
               CONVERSE
             </span>
-            <span className="text-[11px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-[#3B82F6] font-sans flex items-center gap-1">
-              AI<span className="inline-block w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
+            <span className="text-[11px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-white font-sans flex items-center gap-1">
+              AI.
             </span>
           </div>
         </Link>
