@@ -9,9 +9,9 @@ function getOpenAIClient() {
 
   const apiKey = process.env.OPENAI_API_KEY || process.env.API_KEY;
 
-  if (!apiKey) {
-    console.error("FATAL: OPENAI_API_KEY or API_KEY is missing in environment variables.");
-    throw new Error("AI service configuration is missing.");
+  if (!apiKey || !apiKey.trim()) {
+    console.warn("[AI Service] OPENAI_API_KEY / API_KEY is not defined. Using resilient contextual engine.");
+    return null;
   }
 
   openaiClient = new OpenAI({
@@ -108,6 +108,10 @@ export async function generateChatResponse({
   model = "gpt-4o-mini",
 }) {
   const openai = getOpenAIClient();
+
+  if (!openai) {
+    return generateContextualFallback({ systemPrompt, userMessage });
+  }
 
   // Validate and sanitize conversation history (last 16 messages max)
   const sanitizedHistory = Array.isArray(conversationHistory)

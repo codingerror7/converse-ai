@@ -38,25 +38,59 @@ app.use(
   })
 );
 
-// CORS configuration supporting local development and deployed frontend
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  process.env.FRONTEND_URL,
-].filter(Boolean);
+// CORS configuration supporting local development, custom domains, and Vercel preview deployments
+function buildAllowedOrigins() {
+  const defaults = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+  ];
+
+  const envOrigins = [
+    process.env.FRONTEND_URL,
+    process.env.CLIENT_ORIGIN,
+  ]
+    .filter(Boolean)
+    .flatMap((val) => val.split(",").map((s) => s.trim()))
+    .map((origin) => origin.replace(/\/+$/, "")); // Strip trailing slashes
+
+  return Array.from(new Set([...defaults, ...envOrigins]));
+}
+
+const allowedOrigins = buildAllowedOrigins();
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow non-browser requests (Postman, curl, server-to-server)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("*")) {
+
+      const cleanOrigin = origin.replace(/\/+$/, "");
+
+      // Direct match against allowed origins list
+      if (allowedOrigins.includes(cleanOrigin) || allowedOrigins.includes("*")) {
         return callback(null, true);
       }
-      return callback(null, true); // Permissive in dev to avoid CORS blockers
+
+      // Match Vercel preview deployments (*.vercel.app)
+      if (/^https:\/\/[a-zA-Z0-9-_.]+\.vercel\.app$/.test(cleanOrigin)) {
+        return callback(null, true);
+      }
+
+      // Permissive fallback in local development
+      if (process.env.NODE_ENV !== "production") {
+        return callback(null, true);
+      }
+
+      console.warn(`[CORS Blocked] Origin "${origin}" is not authorized.`);
+      return callback(new Error("Origin not allowed by CORS policy."));
     },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"],
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 

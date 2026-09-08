@@ -1,9 +1,23 @@
 /**
- * Centralized Hardened API Client for Converse-AI Frontend
+ * Resolves the canonical API base URL with automatic normalization:
+ * - Strips trailing slashes
+ * - Ensures the `/api` prefix is always present
+ * - Gracefully falls back to http://localhost:8000/api in local dev
  */
+function getApiBaseUrl() {
+  const rawUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
+    return "http://localhost:8000/api";
+  }
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+  let cleaned = rawUrl.trim().replace(/\/+$/, "");
+  if (!cleaned.endsWith("/api")) {
+    cleaned = `${cleaned}/api`;
+  }
+  return cleaned;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 const REQUEST_TIMEOUT_MS = 18000;
 
