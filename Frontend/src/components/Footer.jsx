@@ -24,12 +24,6 @@ export default function Footer() {
             <p className="text-xs sm:text-sm text-[#94A3B8] max-w-sm leading-relaxed">
               The intelligent AI chatbot engine. Build, customize, and deploy hyper-personalized assistants in minutes.
             </p>
-            <div className="pt-2 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#06B6D4] animate-pulse" />
-              <span className="text-[11px] font-mono text-[#06B6D4]">
-                All Systems Operational
-              </span>
-            </div>
           </div>
 
           {/* Column 1: Product */}
