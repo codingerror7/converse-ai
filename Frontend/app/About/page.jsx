@@ -28,7 +28,7 @@ export default function AboutPage() {
       </div>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24">
+      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-16 pb-16 sm:pb-24">
         
         {/* Page Header */}
         <header className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
