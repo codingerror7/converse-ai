@@ -81,14 +81,14 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs sm:text-[13px]">
               <li>
-                <a href="#about" onClick={(e) => e.preventDefault()} className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150 cursor-pointer">
+                <Link href="/about" className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150">
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="mailto:contact@converse.ai" className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150">
+                <Link href="/contact" className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#changelog" onClick={(e) => e.preventDefault()} className="text-[#94A3B8] hover:text-[#F1F5F9] transition-colors duration-150 cursor-pointer">
@@ -104,13 +104,13 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94A3B8]">
           <p>© 2026 Converse-AI Inc. Built for the modern web.</p>
           <div className="flex items-center gap-5">
-            <a href="#privacy" onClick={(e) => e.preventDefault()} className="hover:text-[#F1F5F9] transition-colors cursor-pointer">
+            <Link href="/privacy" className="hover:text-[#F1F5F9] transition-colors">
               Privacy Policy
-            </a>
+            </Link>
             <span>·</span>
-            <a href="#terms" onClick={(e) => e.preventDefault()} className="hover:text-[#F1F5F9] transition-colors cursor-pointer">
-              Terms of Service
-            </a>
+            <Link href="/terms" className="hover:text-[#F1F5F9] transition-colors">
+              Terms & Conditions
+            </Link>
             <span>·</span>
             <a href="#security" onClick={(e) => e.preventDefault()} className="hover:text-[#F1F5F9] transition-colors cursor-pointer">
               Security
