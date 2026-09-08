@@ -27,18 +27,11 @@ export default function AboutPage() {
         />
       </div>
 
-      {/* Structural Top Pods Navbar */}
-      <NavbarPods />
-
       {/* Main Content Area */}
       <main className="relative z-10 flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24">
         
         {/* Page Header */}
         <header className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101820] border border-[#1E2933] text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.16em] text-[#3B82F6] mb-4 sm:mb-5 shadow-xs">
-            <Sparkles size={11} className="text-[#06B6D4]" />
-            <span>About Converse-AI</span>
-          </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#F1F5F9] font-sans leading-[1.1] mb-4 sm:mb-5">
             Build an AI that{' '}
