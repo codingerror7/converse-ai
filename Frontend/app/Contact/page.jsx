@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export default function ContactPage() {
-  const officialEmail = 'contact@converse.ai';
+  const officialEmail = 'saraswatsujal@gmail.com';
 
   return (
     <div className="min-h-screen bg-[#06090D] text-[#F1F5F9] flex flex-col selection:bg-[#3B82F6]/35 selection:text-[#F1F5F9] relative overflow-x-hidden">
@@ -30,18 +30,13 @@ export default function ContactPage() {
         />
       </div>
 
-      {/* Structural Top Pods Navbar */}
-      <NavbarPods />
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24">
+      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-16 pb-16 sm:pb-24">
         
         {/* Page Header */}
         <header className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101820] border border-[#1E2933] text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.16em] text-[#3B82F6] mb-4 sm:mb-5 shadow-xs">
-            <Mail size={11} className="text-[#06B6D4]" />
-            <span>Contact Us</span>
-          </div>
+          
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#F1F5F9] font-sans leading-[1.1] mb-4 sm:mb-5">
             Get in touch with{' '}
