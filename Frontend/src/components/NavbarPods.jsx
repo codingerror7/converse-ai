@@ -18,11 +18,11 @@ export default function NavbarPods() {
         {/* Brand Typographic Lockup */}
         <Link href="/" className="flex items-center gap-1.5 sm:gap-2 select-none group leading-none">
           <div className="flex flex-col select-none group leading-tight">
-            <span className="text-[12px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans transition-colors group-hover:text-[#F1F5F9]">
+            <span className="text-[14px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-[#F1F5F9] font-sans transition-colors group-hover:text-[#F1F5F9]">
               CONVERSE
             </span>
-            <span className="text-[12px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-white font-sans flex items-center gap-1">
-              AI.
+            <span className="text-[14px] sm:text-[18px] md:text-[20px] font-black tracking-tight uppercase text-[#3B82F6] font-sans flex items-center gap-1">
+              .AI
             </span>
           </div>
         </Link>
@@ -44,7 +44,7 @@ export default function NavbarPods() {
 
         <Link
           href="/Business"
-          className="relative inline-flex items-center justify-center px-3 sm:px-5 py-1.5 sm:py-2 rounded-full bg-[#3B82F6] text-[#F1F5F9] hover:bg-[#2563EB] text-[11px] sm:text-[13px] font-bold tracking-tight transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 whitespace-nowrap"
+          className="relative inline-flex items-center justify-center px-5 sm:px-5 py-2.5 sm:py-2 rounded-full bg-[#3B82F6] text-[#F1F5F9] hover:bg-[#2563EB] text-[11px] sm:text-[13px] font-bold tracking-tight transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:shadow-[0_0_25px_rgba(59,130,246,0.6)] active:scale-95 whitespace-nowrap"
         >
           Build AI
         </Link>
