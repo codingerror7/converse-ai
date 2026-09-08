@@ -68,12 +68,7 @@ export default function FinalCTA() {
           }}
         />
 
-        {/* Faint Abstract Signal Status Notch */}
-        <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 flex items-center gap-1.5 opacity-40 pointer-events-none">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse" />
-          <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse [animation-delay:0.2s]" />
-          <span className="w-1.5 h-1.5 rounded-full bg-[#06B6D4] animate-pulse [animation-delay:0.4s]" />
-        </div>
+       
 
         {/* Asymmetric Editorial Grid */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center w-full">
