@@ -33,10 +33,6 @@ export default function TermsPage() {
         
         {/* Page Header */}
         <header className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101820] border border-[#1E2933] text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.16em] text-[#3B82F6] mb-4 sm:mb-5 shadow-xs">
-            <FileText size={11} className="text-[#06B6D4]" />
-            <span>Terms of Service</span>
-          </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#F1F5F9] font-sans leading-[1.1] mb-3 sm:mb-4">
             Terms & <span className="text-gradient-primary">Conditions</span>
