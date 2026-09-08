@@ -27,11 +27,8 @@ export default function PrivacyPage() {
         />
       </div>
 
-      {/* Structural Top Pods Navbar */}
-      <NavbarPods />
-
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24">
+      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-16 pb-16 sm:pb-24">
         
         {/* Page Header */}
         <header className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
