@@ -1,14 +1,125 @@
 import React from 'react';
 import Link from 'next/link';
-import { Shield, Lock, FileText, ArrowRight } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import NavbarPods from '../../src/components/NavbarPods';
 import Footer from '../../src/components/Footer';
+import LegalAccordion from '../../src/components/LegalAccordion';
 
 export const metadata = {
   title: 'Privacy Policy — Converse-AI',
   description: 'Understand how Converse-AI collects, uses, and protects your information and chatbot data.',
   keywords: ['Privacy Policy', 'Converse-AI Privacy', 'Data Protection', 'AI Data Practices'],
 };
+
+const PRIVACY_SECTIONS = [
+  {
+    id: '01',
+    number: '01',
+    title: 'Information We Collect',
+    content: (
+      <p>
+        When using Converse-AI, we collect information you voluntarily provide to configure chatbots, including business names, business categories, operational descriptions, and custom instructions. When interacting with chatbots, we collect the conversation messages submitted during active chat sessions.
+      </p>
+    ),
+  },
+  {
+    id: '02',
+    number: '02',
+    title: 'How We Use Information',
+    content: (
+      <p>
+        We use the collected information exclusively to provide and improve the Converse-AI platform. This includes constructing tailored system instructions, synthesizing business-specific knowledge contexts, generating conversational responses, and maintaining chatbot availability.
+      </p>
+    ),
+  },
+  {
+    id: '03',
+    number: '03',
+    title: 'Chatbot and Conversation Data',
+    content: (
+      <p>
+        When conversations occur with a created chatbot, message exchanges are processed in real time to maintain conversational context. We do not sell or monetize conversation data to third-party data brokers or advertisers.
+      </p>
+    ),
+  },
+  {
+    id: '04',
+    number: '04',
+    title: 'AI Processing',
+    content: (
+      <p>
+        Converse-AI utilizes underlying artificial intelligence foundation models to generate responses based on your business configurations and user prompts. Prompts and context are transmitted securely to AI processing endpoints to produce accurate completions.
+      </p>
+    ),
+  },
+  {
+    id: '05',
+    number: '05',
+    title: 'Data Storage',
+    content: (
+      <p>
+        Chatbot profiles and operational configurations are stored in secure backend databases. Data transmissions between your browser, our servers, and database storage are protected using standard TLS/HTTPS encryption protocols.
+      </p>
+    ),
+  },
+  {
+    id: '06',
+    number: '06',
+    title: 'Third-Party Services',
+    content: (
+      <p>
+        We rely on trusted cloud infrastructure and AI model providers strictly to host our application and generate chat completions. These providers process data according to necessary operational requirements and standard data protection terms.
+      </p>
+    ),
+  },
+  {
+    id: '07',
+    number: '07',
+    title: 'Data Security',
+    content: (
+      <p>
+        We implement reasonable technical and organizational safeguards to prevent unauthorized access, disclosure, alteration, or destruction of stored chatbot configurations and conversation logs.
+      </p>
+    ),
+  },
+  {
+    id: '08',
+    number: '08',
+    title: 'Data Retention',
+    content: (
+      <p>
+        We retain business configurations and chatbot records as long as necessary to provide uninterrupted service to you and satisfy legitimate operational needs.
+      </p>
+    ),
+  },
+  {
+    id: '09',
+    number: '09',
+    title: 'User Rights',
+    content: (
+      <p>
+        You have the right to request access to, correction of, or deletion of chatbot records associated with your use of the platform. Requests can be submitted directly through our contact channel.
+      </p>
+    ),
+  },
+  {
+    id: '10',
+    number: '10',
+    title: 'Contact for Privacy Inquiries',
+    content: (
+      <p>
+        For any questions regarding this Privacy Policy or our data practices, please reach out to our team at{' '}
+        <a
+          href="mailto:contact@converse.ai"
+          className="text-[#3B82F6] hover:text-[#67E8F9] transition-colors font-mono underline underline-offset-2"
+        >
+          contact@converse.ai
+        </a>
+        .
+      </p>
+    ),
+  },
+];
 
 export default function PrivacyPage() {
   return (
@@ -27,12 +138,18 @@ export default function PrivacyPage() {
         />
       </div>
 
+      {/* Structural Top Pods Navbar */}
+      <NavbarPods />
+
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-16 pb-16 sm:pb-24">
+      <main className="relative z-10 flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 md:pt-36 pb-16 sm:pb-24">
         
         {/* Page Header */}
-        <header className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
-        
+        <header className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#101820] border border-[#1E2933] text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.16em] text-[#3B82F6] mb-4 sm:mb-5 shadow-xs">
+            <Shield size={11} className="text-[#06B6D4]" />
+            <span>Legal & Privacy</span>
+          </div>
           
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#F1F5F9] font-sans leading-[1.1] mb-3 sm:mb-4">
             Privacy <span className="text-gradient-primary">Policy</span>
@@ -43,135 +160,16 @@ export default function PrivacyPage() {
           </p>
         </header>
 
-        {/* Policy Document Chassis */}
-        <div className="p-6 sm:p-10 md:p-12 rounded-[20px] sm:rounded-[32px] bg-[#0B1117]/85 backdrop-blur-xl border border-[#1E2933] shadow-[0_20px_60px_-15px_rgba(6,9,13,0.95)] relative space-y-8 sm:space-y-10">
+        {/* Intro Statement Card */}
+        <div className="mb-6 sm:mb-8 p-5 sm:p-7 rounded-2xl bg-[#0B1117]/85 backdrop-blur-xl border border-[#1E2933] shadow-[0_15px_40px_-15px_rgba(6,9,13,0.9)] relative overflow-hidden">
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#3B82F6]/30 to-transparent pointer-events-none" />
-
-          {/* Intro Statement */}
-          <div className="pb-6 border-b border-[#1E2933]">
-            <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
-              At Converse-AI, we respect your privacy and are committed to protecting the information you share when building and interacting with customized chatbots on our platform. This Privacy Policy explains what information we collect, how it is used, and how we safeguard your data.
-            </p>
-          </div>
-
-          {/* Section 1 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">01.</span>
-              <span>Information We Collect</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              When using Converse-AI, we collect information you voluntarily provide to configure chatbots, including business names, business categories, operational descriptions, and custom instructions. When interacting with chatbots, we collect the conversation messages submitted during active chat sessions.
-            </p>
-          </section>
-
-          {/* Section 2 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">02.</span>
-              <span>How We Use Information</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              We use the collected information exclusively to provide and improve the Converse-AI platform. This includes constructing tailored system instructions, synthesizing business-specific knowledge contexts, generating conversational responses, and maintaining chatbot availability.
-            </p>
-          </section>
-
-          {/* Section 3 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">03.</span>
-              <span>Chatbot and Conversation Data</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              When conversations occur with a created chatbot, message exchanges are processed in real time to maintain conversational context. We do not sell or monetize conversation data to third-party data brokers or advertisers.
-            </p>
-          </section>
-
-          {/* Section 4 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">04.</span>
-              <span>AI Processing</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              Converse-AI utilizes underlying artificial intelligence foundation models to generate responses based on your business configurations and user prompts. Prompts and context are transmitted securely to AI processing endpoints to produce accurate completions.
-            </p>
-          </section>
-
-          {/* Section 5 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">05.</span>
-              <span>Data Storage</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              Chatbot profiles and operational configurations are stored in secure backend databases. Data transmissions between your browser, our servers, and database storage are protected using standard TLS/HTTPS encryption protocols.
-            </p>
-          </section>
-
-          {/* Section 6 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">06.</span>
-              <span>Third-Party Services</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              We rely on trusted cloud infrastructure and AI model providers strictly to host our application and generate chat completions. These providers process data according to necessary operational requirements and standard data protection terms.
-            </p>
-          </section>
-
-          {/* Section 7 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">07.</span>
-              <span>Data Security</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              We implement reasonable technical and organizational safeguards to prevent unauthorized access, disclosure, alteration, or destruction of stored chatbot configurations and conversation logs.
-            </p>
-          </section>
-
-          {/* Section 8 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">08.</span>
-              <span>Data Retention</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              We retain business configurations and chatbot records as long as necessary to provide uninterrupted service to you and satisfy legitimate operational needs.
-            </p>
-          </section>
-
-          {/* Section 9 */}
-          <section className="space-y-2.5">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#3B82F6]">09.</span>
-              <span>User Rights</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              You have the right to request access to, correction of, or deletion of chatbot records associated with your use of the platform. Requests can be submitted directly through our contact channel.
-            </p>
-          </section>
-
-          {/* Section 10 */}
-          <section className="space-y-2.5 pt-4 border-t border-[#1E2933]">
-            <h2 className="text-sm sm:text-base font-bold text-[#F1F5F9] flex items-center gap-2">
-              <span className="font-mono text-xs text-[#06B6D4]">10.</span>
-              <span>Contact for Privacy Inquiries</span>
-            </h2>
-            <p className="text-xs sm:text-[13px] text-[#94A3B8] leading-relaxed">
-              For any questions regarding this Privacy Policy or our data practices, please reach out to our team at{' '}
-              <a
-                href="mailto:contact@converse.ai"
-                className="text-[#3B82F6] hover:text-[#67E8F9] transition-colors font-mono underline underline-offset-2"
-              >
-                contact@converse.ai
-              </a>
-              .
-            </p>
-          </section>
-
+          <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+            At Converse-AI, we respect your privacy and are committed to protecting the information you share when building and interacting with customized chatbots on our platform. This Privacy Policy explains what information we collect, how it is used, and how we safeguard your data.
+          </p>
         </div>
+
+        {/* Expandable Accordion Sections */}
+        <LegalAccordion items={PRIVACY_SECTIONS} initialOpenId="01" />
 
       </main>
 
