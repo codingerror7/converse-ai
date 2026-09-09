@@ -33,7 +33,7 @@ export default function NotFound() {
         >
           <ArrowLeft size={14} />
           <span>Return Home</span>
-        </Link>
+        </Link>~
       </main>
 
       <Footer />
