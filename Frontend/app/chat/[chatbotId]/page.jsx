@@ -21,7 +21,7 @@ import {
   ExternalLink,
   RefreshCw,
 } from 'lucide-react';
-import { getChatbotAPI, sendChatMessageAPI } from '../../../src/lib/api';
+import { getChatbotAPI, sendChatMessageAPI, getChatbotShareUrl } from '../../../src/lib/api';
 
 /* -------------------------------------------------------------------------- */
 /* Memoized Individual Chat Message Component (Prevents list re-renders)      */
@@ -234,10 +234,11 @@ export default function ChatbotPage() {
 
   // Resilient Copy Public Link with Clipboard API & Fallback
   const handleCopyShareLink = () => {
-    if (typeof window === 'undefined') return;
-    const url = window.location.href;
+    const activeId = chatbot?.chatbotId || chatbotId;
+    const url = activeId ? getChatbotShareUrl(activeId) : (typeof window !== 'undefined' ? window.location.href : '');
+    if (!url) return;
 
-    if (navigator.clipboard && window.isSecureContext) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(url).then(() => {
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2200);

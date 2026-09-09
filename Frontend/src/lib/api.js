@@ -1,12 +1,22 @@
+const PRODUCTION_API_URL = "https://converse-ai-j0nw.onrender.com/api";
+const PRODUCTION_FRONTEND_URL = "https://converse-8sqenwhpd-codingerror7s-projects.vercel.app";
+
 /**
  * Resolves the canonical API base URL with automatic normalization:
  * - Strips trailing slashes
- * - Ensures the `/api` prefix is always present
- * - Gracefully falls back to http://localhost:8000/api in local dev
+ * - Ensures the `/api` prefix is always present without duplicating
+ * - Gracefully falls back to production Render backend or local backend
+ *
+ * @returns {string} Fully qualified API base URL ending with `/api`
  */
-function getApiBaseUrl() {
+export function getApiBaseUrl() {
   const rawUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
+    // If not explicitly set in environment, use production Render backend in production,
+    // or fallback to local port 8000 in dev
+    if (process.env.NODE_ENV === "production") {
+      return PRODUCTION_API_URL;
+    }
     return "http://localhost:8000/api";
   }
 
@@ -17,7 +27,39 @@ function getApiBaseUrl() {
   return cleaned;
 }
 
-const API_BASE_URL = getApiBaseUrl();
+/**
+ * Resolves the canonical Frontend base URL:
+ * - Uses active window origin in browser if available
+ * - Falls back to NEXT_PUBLIC_FRONTEND_URL or production Vercel URL
+ *
+ * @returns {string} Fully qualified Frontend base URL without trailing slash
+ */
+export function getFrontendBaseUrl() {
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin.replace(/\/+$/, "");
+  }
+
+  const rawUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+  if (rawUrl && typeof rawUrl === "string" && rawUrl.trim()) {
+    return rawUrl.trim().replace(/\/+$/, "");
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    return PRODUCTION_FRONTEND_URL;
+  }
+  return "http://localhost:3000";
+}
+
+/**
+ * Generates the absolute public URL for a created chatbot.
+ *
+ * @param {string} chatbotId - The unique identifier of the chatbot
+ * @returns {string} The complete public chatbot URL
+ */
+export function getChatbotShareUrl(chatbotId) {
+  const sanitizedId = (chatbotId || "").trim();
+  return `${getFrontendBaseUrl()}/chat/${encodeURIComponent(sanitizedId)}`;
+}
 
 const REQUEST_TIMEOUT_MS = 18000;
 
@@ -92,7 +134,7 @@ export async function createChatbotAPI(data, signal = null) {
   const { signal: explicitSignal, ...payload } = data;
   const activeSignal = signal || explicitSignal;
 
-  const response = await fetchWithTimeout(`${API_BASE_URL}/chatbots`, {
+  const response = await fetchWithTimeout(`${getApiBaseUrl()}/chatbots`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -121,7 +163,7 @@ export async function createChatbotAPI(data, signal = null) {
  */
 export async function getChatbotAPI(chatbotId, signal = null) {
   const sanitizedId = encodeURIComponent((chatbotId || "").trim());
-  const response = await fetchWithTimeout(`${API_BASE_URL}/chatbots/${sanitizedId}`, {
+  const response = await fetchWithTimeout(`${getApiBaseUrl()}/chatbots/${sanitizedId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -157,7 +199,7 @@ export async function sendChatMessageAPI({
   conversationHistory = [],
   signal = null,
 }) {
-  const response = await fetchWithTimeout(`${API_BASE_URL}/chat`, {
+  const response = await fetchWithTimeout(`${getApiBaseUrl()}/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -181,4 +223,23 @@ export async function sendChatMessageAPI({
   }
 
   return result;
+}
+
+/**
+ * Checks backend health and database connectivity.
+ *
+ * @param {AbortSignal} [signal]
+ * @returns {Promise<{status: string, database: string, service: string}>}
+ */
+export async function checkApiHealthAPI(signal = null) {
+  const response = await fetchWithTimeout(`${getApiBaseUrl()}/health`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+    signal,
+  });
+
+  return await parseResponseData(response);
 }
