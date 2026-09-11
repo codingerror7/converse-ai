@@ -1,6 +1,6 @@
 Converse-AI - https://converse-8sqenwhpd-codingerror7s-projects.vercel.app/
 
-Build a customized AI chatbot for your business in minutes.
+
 
 Converse-AI is an AI chatbot builder that allows businesses to create a chatbot tailored to their business, category, description, and desired behavior—without requiring complex AI configuration.
 
